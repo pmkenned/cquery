@@ -12,11 +12,6 @@ class Signal;
 class Module;
 class Instantiation;
 
-class Assign : public Driver {
-
-
-};
-
 class Driver {
 
     private:
@@ -33,6 +28,12 @@ class Driver {
         }
 
 };
+
+class Assign : public Driver {
+
+
+};
+
 
 class Signal {
 
@@ -106,7 +107,6 @@ class Module {
 
 };
 
-
 int main(int argc, char * argv[]) {
 
 
@@ -120,7 +120,7 @@ int main(int argc, char * argv[]) {
     Module & f_m = f.get_module();
     cout << f_m.get_name() << endl;
 
-    Instantiation b = bar.instantiate();
+    Instantiation & b = bar.instantiate();
 
     foo.add_inst(b);
 
