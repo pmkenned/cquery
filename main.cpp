@@ -1,127 +1,32 @@
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
-
 #include <list>
+
+#include "driver.h"
+#include "assign.h"
+#include "signal.h"
+#include "module.h"
+#include "instantiation.h"
 
 using namespace std;
 
-class Driver;
-class Assign;
-class Signal;
-class Module;
-class Instantiation;
-
-class Driver {
-
-    private:
-        int line_number;
-    public:
-
-        Driver(int ll = 0) {
-            line_number = ll;
-            cout << "driver constructor" << endl;
-        }
-
-        int get_line_number() {
-            return line_number;
-        }
-
-};
-
-class Assign : public Driver {
-
-
-};
-
-
-class Signal {
-
-    private:
-        Driver * d;
-
-    public:
-
-        Signal(Driver & dd) : d(d) {
-            cout << "signal constructor" << endl;
-        }
-
-
-       Driver& get_driver() {
-            return *d;
-        }
-
-
-};
-
-class Instantiation {
-
-    private:
-
-        string name;
-        Module * module_type;
-        Instantiation * parent;
-
-    public:
-
-        Instantiation(Module * mt) : module_type(mt) {
-        }
-
-        Instantiation& get_parent() {
-            return *parent;
-        }
-
-        Module& get_module() {
-            return *module_type;
-        }
-
-};
-
-class Module {
-
-    private:
-
-        string name;
-        list<Instantiation> insts;
-        list<Signal> iolist;
-        list<Signal> internal_sigs;
-        list<Assign> assigns;
-
-    public:
-
-        Module(string n) : name(n) {
-        }
-
-        const string& get_name () const {
-            return name;
-        }
-
-        Instantiation & instantiate() {
-            Instantiation * inst = new Instantiation(this);
-            return *inst;
-        }
-
-        void add_inst(Instantiation inst) {
-            insts.push_back(inst);
-        }
-
-};
-
 int main(int argc, char * argv[]) {
 
+    Module Alpha("Alpha");
+    Module Bravo("Bravo");
+    Module Charlie("Charlie");
 
-    Module foo("foo");
-    Module bar("bar");
+    Bravo.add_signal("x");
+    Bravo.add_assign("x"); // TODO: expression argument
 
-    cout << foo.get_name() << endl;
+    Bravo.add_inst(Charlie, "c0");
 
-    Instantiation f = foo.instantiate();
+    Alpha.add_inst(Bravo, "b0");
+    Alpha.add_inst(Bravo, "b1");
 
-    Module & f_m = f.get_module();
-    cout << f_m.get_name() << endl;
+    Instantiation a = Alpha.instantiate();
 
-    Instantiation & b = bar.instantiate();
-
-    foo.add_inst(b);
+    a.print_hierarchy();
 
 }
