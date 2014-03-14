@@ -2,10 +2,18 @@
 #define INSTANTIATION_H
 
 #include <iostream>
+#include <list>
+#include <utility>
+
+namespace rtlp {
+
+using std::string;
 
 class Module; // contains Module* member
 
-using namespace std;
+// TODO: int should be expression
+// should string actually be signal? we may only need the name
+typedef std::list<std::pair<string, int> > PortMap;
 
 class Instantiation {
 
@@ -13,7 +21,8 @@ class Instantiation {
         string name;
         Module * module_type;
         Instantiation * parent;
-        list<Instantiation> insts;
+        std::list<Instantiation> insts;
+        PortMap p;
 
     public:
         // constructors
@@ -23,9 +32,9 @@ class Instantiation {
             { }
 
         // accessors
-        const string& get_name () const { return name; }
-        Instantiation& get_parent() { return *parent; }
-        Module& get_module() { return *module_type; }
+        string const & get_name () const { return name; }
+        Instantiation const & get_parent() const { return *parent; }
+        Module const & get_module() const { return *module_type; }
 
         void add_inst(Instantiation inst) {
             insts.push_back(inst);
@@ -33,14 +42,16 @@ class Instantiation {
 
         void print_hierarchy(int n=1) {
 
-            list<Instantiation>::iterator i;
+            std::list<Instantiation>::iterator i;
             for(i = insts.begin(); i != insts.end(); i++ ) {
                 for(int j=0; j<n; j++)
-                    cout << "  ";
-                cout << i->get_name() << endl;
+                    std::cout << "  ";
+                std::cout << i->get_name() << std::endl;
                 i->print_hierarchy(n+1);
             }
         }
 };
+
+} // namespace rtlp
 
 #endif // INSTANTIATION_H

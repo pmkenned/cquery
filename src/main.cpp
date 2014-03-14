@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
-#include <list>
 
 #include "driver.h"
 #include "assign.h"
@@ -10,6 +9,7 @@
 #include "instantiation.h"
 
 using namespace std;
+using namespace rtlp;
 
 int main(int argc, char * argv[]) {
 
@@ -18,6 +18,7 @@ int main(int argc, char * argv[]) {
     Module Charlie("Charlie");
 
     Bravo.add_signal("x");
+
     Bravo.add_assign("x"); // TODO: expression argument
 
     Bravo.add_inst(Charlie, "c0");

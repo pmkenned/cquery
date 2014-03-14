@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-using namespace std;
+namespace rtlp {
 
 class Driver {
 
@@ -13,7 +13,7 @@ class Driver {
 
         Driver(int ll = 0) {
             line_number = ll;
-            cout << "driver constructor" << endl;
+            std::cout << "driver constructor" << std::endl;
         }
 
         int get_line_number() {
@@ -21,5 +21,6 @@ class Driver {
         }
 };
 
+} // namespace rtlp
 
 #endif // DRIVER_H

@@ -1,0 +1,6 @@
+To Do list
+* Learn how to properly handle references and const
+* Decide where to do allocation for class resources
+* Make expression tree
+* Support multi-bit signals
+* Use autoconf tools

@@ -2,9 +2,12 @@
 #define MODULE_H
 
 #include <iostream>
+#include <list>
 #include "instantiation.h"
 
-using namespace std;
+namespace rtlp {
+
+using std::string;
 
 class Module; // ToBeInst contains a Module&
 
@@ -22,14 +25,14 @@ class Module {
 
     private:
         string name;
-        list<ToBeInst> tbis;
-        list<Signal> inputs;
-        list<Signal> outputs;
-        list<Signal> internal_sigs;
-        list<Assign> assigns;
+        std::list<ToBeInst> tbis;
+        std::list<Signal> inputs;
+        std::list<Signal> outputs;
+        std::list<Signal> internal_sigs;
+        std::list<Assign> assigns;
 
     public:
-        //constructors
+        // constructors
         Module(string n) : name(n) {}
         // accessors
         const string& get_name () const { return name; }
@@ -38,13 +41,13 @@ class Module {
             // TODO: get the signal that has name n
             // maybe this should be done with a map
             // or maintain a sorted list and do a binary search
-            Signal * s = new Signal(n);
+            Signal * s = new Signal(n,1);
             Assign * a = new Assign(*s);
             assigns.push_back(*a);
         }
 
         void add_signal(string n) {
-            Signal * s = new Signal(n);
+            Signal * s = new Signal(n,1);
             internal_sigs.push_back(*s);
         }
 
@@ -58,11 +61,11 @@ class Module {
         }
 
         Instantiation& instantiate(string n = "", Instantiation * parent = 0) {
-            cout << "creating instantiation with name " << n << endl;
+            std::cout << "creating instantiation with name " << n << std::endl;
 
             Instantiation * inst = new Instantiation(this, parent, n);
 
-            list<ToBeInst>::iterator i;
+            std::list<ToBeInst>::iterator i;
             for(i = tbis.begin(); i != tbis.end(); i++) {
                 Module & i_m = i->module_type;
                 string i_n = i->name;
@@ -73,5 +76,7 @@ class Module {
             return *inst;
         }
 };
+
+} // namespace rtlp
 
 #endif // MODULE_H

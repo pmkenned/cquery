@@ -5,19 +5,20 @@
 
 #include "driver.h" // inherits from Driver
 
-class Signal;
+namespace rtlp {
 
-using namespace std;
+class Signal;
 
 class Assign : public Driver {
 
     private:
-        Signal& signal;
+        Signal * signal;
 
     public:
-        Assign(Signal& s) : signal(s) {}
+        Assign(Signal & s) : signal(&s) {}
 
 };
 
+} // namespace rtlp
 
 #endif // ASSIGN_H
