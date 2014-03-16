@@ -48,283 +48,279 @@ extern int yydebug;
    enum yytokentype {
      TILDE_AMP = 258,
      CARET_PIPE = 259,
-     CARET_TICK = 260,
-     TILDE_CARET = 261,
-     EQ_EQ = 262,
-     NOT_EQ = 263,
-     EQ_EQ_EQ = 264,
-     NOT_EQ_EQ = 265,
-     AMP_AMP = 266,
-     AMP_AMP_AMP = 267,
-     PIPE_PIPE = 268,
-     LTE = 269,
-     GTE = 270,
-     CARET_TILDE = 271,
-     LSHIFT = 272,
-     RSHIFT = 273,
-     EQ_GT = 274,
-     AST_GT = 275,
-     HYPH_GT = 276,
-     SETUP = 277,
-     HOLD = 278,
-     PERIOD = 279,
-     WIDTH = 280,
-     SKEW = 281,
-     RECOVERY = 282,
-     SETUPHOLD = 283,
-     _BEGIN_ = 284,
-     END = 285,
-     MACROMODULE = 286,
-     MODULE = 287,
-     ENDMODULE = 288,
-     PRIMITIVE = 289,
-     ENDPRIMITIVE = 290,
-     TABLE = 291,
-     ENDTABLE = 292,
-     TASK = 293,
-     ENDTASK = 294,
-     FUNCTION = 295,
-     ENDFUNCTION = 296,
-     SPECIFY = 297,
-     ENDSPECIFY = 298,
-     INTEGER = 299,
-     REAL = 300,
-     TIME = 301,
-     SPECPARAM = 302,
-     PARAMETER = 303,
-     DEFPARAM = 304,
-     INPUT = 305,
-     OUTPUT = 306,
-     INOUT = 307,
-     WIRE = 308,
-     TRI = 309,
-     TRI0 = 310,
-     TRI1 = 311,
-     SUPPLY0 = 312,
-     SUPPLY1 = 313,
-     WAND = 314,
-     TRIAND = 315,
-     TRIOR = 316,
-     WOR = 317,
-     TRIREG = 318,
-     SCALARED = 319,
-     VECTORED = 320,
-     REG = 321,
-     EVENT = 322,
-     SMALL = 323,
-     MEDIUM = 324,
-     LARGE = 325,
-     STRONG0 = 326,
-     STRONG1 = 327,
-     PULL0 = 328,
-     PULL1 = 329,
-     WEAK0 = 330,
-     WEAK1 = 331,
-     HIGHZ0 = 332,
-     HIGHZ1 = 333,
-     AND = 334,
-     NAND = 335,
-     OR = 336,
-     NOR = 337,
-     XOR = 338,
-     XNOR = 339,
-     BUF = 340,
-     BUFIF0 = 341,
-     BUFIF1 = 342,
-     NOT = 343,
-     NOTIF0 = 344,
-     NOTIF1 = 345,
-     PULLDOWN = 346,
-     PULLUP = 347,
-     NMOS = 348,
-     RNMOS = 349,
-     PMOS = 350,
-     RPMOS = 351,
-     CMOS = 352,
-     RCMOS = 353,
-     TRAN = 354,
-     RTRAN = 355,
-     TRANIF0 = 356,
-     TRANIF1 = 357,
-     RTRANIF0 = 358,
-     RTRANIF1 = 359,
-     ASSIGN = 360,
-     DEASSIGN = 361,
-     _INITIAL_ = 362,
-     ALWAYS = 363,
-     IF = 364,
-     ELSE = 365,
-     CASE = 366,
-     CASEZ = 367,
-     CASEX = 368,
-     ENDCASE = 369,
-     DEFAULT = 370,
-     FOREVER = 371,
-     REPEAT = 372,
-     WHILE = 373,
-     FOR = 374,
-     WAIT = 375,
-     DISABLE = 376,
-     FORCE = 377,
-     RELEASE = 378,
-     FORK = 379,
-     JOIN = 380,
-     POSEDGE = 381,
-     NEGEDGE = 382,
-     EDGE = 383,
-     OUTPUT_SYMBOL = 384,
-     INIT_VAL = 385,
-     STRING = 386,
-     IDENTIFIER = 387,
-     NUMBER = 388,
-     DECIMAL_NUMBER = 389,
-     UNSIGNED_NUMBER = 390,
-     BASE = 391,
-     SCALAR_CONSTANT = 392,
-     LEVEL_SYMBOL = 393,
-     EDGE_SYMBOL = 394,
-     EDGE_DESCRIPTOR = 395
+     TILDE_CARET = 260,
+     EQ_EQ = 261,
+     NOT_EQ = 262,
+     EQ_EQ_EQ = 263,
+     NOT_EQ_EQ = 264,
+     LAND = 265,
+     AMP_AMP_AMP = 266,
+     LOR = 267,
+     LTE = 268,
+     GTE = 269,
+     CARET_TILDE = 270,
+     LSHIFT = 271,
+     RSHIFT = 272,
+     EQ_GT = 273,
+     AST_GT = 274,
+     HYPH_GT = 275,
+     SETUP = 276,
+     HOLD = 277,
+     PERIOD = 278,
+     WIDTH = 279,
+     SKEW = 280,
+     RECOVERY = 281,
+     SETUPHOLD = 282,
+     _BEGIN_ = 283,
+     END = 284,
+     MACROMODULE = 285,
+     MODULE = 286,
+     ENDMODULE = 287,
+     PRIMITIVE = 288,
+     ENDPRIMITIVE = 289,
+     TABLE = 290,
+     ENDTABLE = 291,
+     TASK = 292,
+     ENDTASK = 293,
+     FUNCTION = 294,
+     ENDFUNCTION = 295,
+     SPECIFY = 296,
+     ENDSPECIFY = 297,
+     INTEGER = 298,
+     REAL = 299,
+     TIME = 300,
+     SPECPARAM = 301,
+     PARAMETER = 302,
+     DEFPARAM = 303,
+     INPUT = 304,
+     OUTPUT = 305,
+     INOUT = 306,
+     WIRE = 307,
+     TRI = 308,
+     TRI0 = 309,
+     TRI1 = 310,
+     SUPPLY0 = 311,
+     SUPPLY1 = 312,
+     WAND = 313,
+     TRIAND = 314,
+     TRIOR = 315,
+     WOR = 316,
+     TRIREG = 317,
+     SCALARED = 318,
+     VECTORED = 319,
+     REG = 320,
+     EVENT = 321,
+     SMALL = 322,
+     MEDIUM = 323,
+     LARGE = 324,
+     STRONG0 = 325,
+     STRONG1 = 326,
+     PULL0 = 327,
+     PULL1 = 328,
+     WEAK0 = 329,
+     WEAK1 = 330,
+     HIGHZ0 = 331,
+     HIGHZ1 = 332,
+     AND = 333,
+     NAND = 334,
+     OR = 335,
+     NOR = 336,
+     XOR = 337,
+     XNOR = 338,
+     BUF = 339,
+     BUFIF0 = 340,
+     BUFIF1 = 341,
+     NOT = 342,
+     NOTIF0 = 343,
+     NOTIF1 = 344,
+     PULLDOWN = 345,
+     PULLUP = 346,
+     NMOS = 347,
+     RNMOS = 348,
+     PMOS = 349,
+     RPMOS = 350,
+     CMOS = 351,
+     RCMOS = 352,
+     TRAN = 353,
+     RTRAN = 354,
+     TRANIF0 = 355,
+     TRANIF1 = 356,
+     RTRANIF0 = 357,
+     RTRANIF1 = 358,
+     ASSIGN = 359,
+     DEASSIGN = 360,
+     _INITIAL_ = 361,
+     ALWAYS = 362,
+     IF = 363,
+     ELSE = 364,
+     CASE = 365,
+     CASEZ = 366,
+     CASEX = 367,
+     ENDCASE = 368,
+     DEFAULT = 369,
+     FOREVER = 370,
+     REPEAT = 371,
+     WHILE = 372,
+     FOR = 373,
+     WAIT = 374,
+     DISABLE = 375,
+     FORCE = 376,
+     RELEASE = 377,
+     FORK = 378,
+     JOIN = 379,
+     POSEDGE = 380,
+     NEGEDGE = 381,
+     EDGE = 382,
+     OUTPUT_SYMBOL = 383,
+     INIT_VAL = 384,
+     STRING = 385,
+     IDENTIFIER = 386,
+     DECIMAL_NUMBER = 387,
+     UNSIGNED_NUMBER = 388,
+     BASE = 389,
+     SCALAR_CONSTANT = 390,
+     LEVEL_SYMBOL = 391,
+     EDGE_SYMBOL = 392,
+     EDGE_DESCRIPTOR = 393
    };
 #endif
 /* Tokens.  */
 #define TILDE_AMP 258
 #define CARET_PIPE 259
-#define CARET_TICK 260
-#define TILDE_CARET 261
-#define EQ_EQ 262
-#define NOT_EQ 263
-#define EQ_EQ_EQ 264
-#define NOT_EQ_EQ 265
-#define AMP_AMP 266
-#define AMP_AMP_AMP 267
-#define PIPE_PIPE 268
-#define LTE 269
-#define GTE 270
-#define CARET_TILDE 271
-#define LSHIFT 272
-#define RSHIFT 273
-#define EQ_GT 274
-#define AST_GT 275
-#define HYPH_GT 276
-#define SETUP 277
-#define HOLD 278
-#define PERIOD 279
-#define WIDTH 280
-#define SKEW 281
-#define RECOVERY 282
-#define SETUPHOLD 283
-#define _BEGIN_ 284
-#define END 285
-#define MACROMODULE 286
-#define MODULE 287
-#define ENDMODULE 288
-#define PRIMITIVE 289
-#define ENDPRIMITIVE 290
-#define TABLE 291
-#define ENDTABLE 292
-#define TASK 293
-#define ENDTASK 294
-#define FUNCTION 295
-#define ENDFUNCTION 296
-#define SPECIFY 297
-#define ENDSPECIFY 298
-#define INTEGER 299
-#define REAL 300
-#define TIME 301
-#define SPECPARAM 302
-#define PARAMETER 303
-#define DEFPARAM 304
-#define INPUT 305
-#define OUTPUT 306
-#define INOUT 307
-#define WIRE 308
-#define TRI 309
-#define TRI0 310
-#define TRI1 311
-#define SUPPLY0 312
-#define SUPPLY1 313
-#define WAND 314
-#define TRIAND 315
-#define TRIOR 316
-#define WOR 317
-#define TRIREG 318
-#define SCALARED 319
-#define VECTORED 320
-#define REG 321
-#define EVENT 322
-#define SMALL 323
-#define MEDIUM 324
-#define LARGE 325
-#define STRONG0 326
-#define STRONG1 327
-#define PULL0 328
-#define PULL1 329
-#define WEAK0 330
-#define WEAK1 331
-#define HIGHZ0 332
-#define HIGHZ1 333
-#define AND 334
-#define NAND 335
-#define OR 336
-#define NOR 337
-#define XOR 338
-#define XNOR 339
-#define BUF 340
-#define BUFIF0 341
-#define BUFIF1 342
-#define NOT 343
-#define NOTIF0 344
-#define NOTIF1 345
-#define PULLDOWN 346
-#define PULLUP 347
-#define NMOS 348
-#define RNMOS 349
-#define PMOS 350
-#define RPMOS 351
-#define CMOS 352
-#define RCMOS 353
-#define TRAN 354
-#define RTRAN 355
-#define TRANIF0 356
-#define TRANIF1 357
-#define RTRANIF0 358
-#define RTRANIF1 359
-#define ASSIGN 360
-#define DEASSIGN 361
-#define _INITIAL_ 362
-#define ALWAYS 363
-#define IF 364
-#define ELSE 365
-#define CASE 366
-#define CASEZ 367
-#define CASEX 368
-#define ENDCASE 369
-#define DEFAULT 370
-#define FOREVER 371
-#define REPEAT 372
-#define WHILE 373
-#define FOR 374
-#define WAIT 375
-#define DISABLE 376
-#define FORCE 377
-#define RELEASE 378
-#define FORK 379
-#define JOIN 380
-#define POSEDGE 381
-#define NEGEDGE 382
-#define EDGE 383
-#define OUTPUT_SYMBOL 384
-#define INIT_VAL 385
-#define STRING 386
-#define IDENTIFIER 387
-#define NUMBER 388
-#define DECIMAL_NUMBER 389
-#define UNSIGNED_NUMBER 390
-#define BASE 391
-#define SCALAR_CONSTANT 392
-#define LEVEL_SYMBOL 393
-#define EDGE_SYMBOL 394
-#define EDGE_DESCRIPTOR 395
+#define TILDE_CARET 260
+#define EQ_EQ 261
+#define NOT_EQ 262
+#define EQ_EQ_EQ 263
+#define NOT_EQ_EQ 264
+#define LAND 265
+#define AMP_AMP_AMP 266
+#define LOR 267
+#define LTE 268
+#define GTE 269
+#define CARET_TILDE 270
+#define LSHIFT 271
+#define RSHIFT 272
+#define EQ_GT 273
+#define AST_GT 274
+#define HYPH_GT 275
+#define SETUP 276
+#define HOLD 277
+#define PERIOD 278
+#define WIDTH 279
+#define SKEW 280
+#define RECOVERY 281
+#define SETUPHOLD 282
+#define _BEGIN_ 283
+#define END 284
+#define MACROMODULE 285
+#define MODULE 286
+#define ENDMODULE 287
+#define PRIMITIVE 288
+#define ENDPRIMITIVE 289
+#define TABLE 290
+#define ENDTABLE 291
+#define TASK 292
+#define ENDTASK 293
+#define FUNCTION 294
+#define ENDFUNCTION 295
+#define SPECIFY 296
+#define ENDSPECIFY 297
+#define INTEGER 298
+#define REAL 299
+#define TIME 300
+#define SPECPARAM 301
+#define PARAMETER 302
+#define DEFPARAM 303
+#define INPUT 304
+#define OUTPUT 305
+#define INOUT 306
+#define WIRE 307
+#define TRI 308
+#define TRI0 309
+#define TRI1 310
+#define SUPPLY0 311
+#define SUPPLY1 312
+#define WAND 313
+#define TRIAND 314
+#define TRIOR 315
+#define WOR 316
+#define TRIREG 317
+#define SCALARED 318
+#define VECTORED 319
+#define REG 320
+#define EVENT 321
+#define SMALL 322
+#define MEDIUM 323
+#define LARGE 324
+#define STRONG0 325
+#define STRONG1 326
+#define PULL0 327
+#define PULL1 328
+#define WEAK0 329
+#define WEAK1 330
+#define HIGHZ0 331
+#define HIGHZ1 332
+#define AND 333
+#define NAND 334
+#define OR 335
+#define NOR 336
+#define XOR 337
+#define XNOR 338
+#define BUF 339
+#define BUFIF0 340
+#define BUFIF1 341
+#define NOT 342
+#define NOTIF0 343
+#define NOTIF1 344
+#define PULLDOWN 345
+#define PULLUP 346
+#define NMOS 347
+#define RNMOS 348
+#define PMOS 349
+#define RPMOS 350
+#define CMOS 351
+#define RCMOS 352
+#define TRAN 353
+#define RTRAN 354
+#define TRANIF0 355
+#define TRANIF1 356
+#define RTRANIF0 357
+#define RTRANIF1 358
+#define ASSIGN 359
+#define DEASSIGN 360
+#define _INITIAL_ 361
+#define ALWAYS 362
+#define IF 363
+#define ELSE 364
+#define CASE 365
+#define CASEZ 366
+#define CASEX 367
+#define ENDCASE 368
+#define DEFAULT 369
+#define FOREVER 370
+#define REPEAT 371
+#define WHILE 372
+#define FOR 373
+#define WAIT 374
+#define DISABLE 375
+#define FORCE 376
+#define RELEASE 377
+#define FORK 378
+#define JOIN 379
+#define POSEDGE 380
+#define NEGEDGE 381
+#define EDGE 382
+#define OUTPUT_SYMBOL 383
+#define INIT_VAL 384
+#define STRING 385
+#define IDENTIFIER 386
+#define DECIMAL_NUMBER 387
+#define UNSIGNED_NUMBER 388
+#define BASE 389
+#define SCALAR_CONSTANT 390
+#define LEVEL_SYMBOL 391
+#define EDGE_SYMBOL 392
+#define EDGE_DESCRIPTOR 393
 
 
 

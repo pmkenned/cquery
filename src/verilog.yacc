@@ -4,6 +4,7 @@
 %}
 
 /* TODO:
+  * fix shift/reduce conflicts!
   * define tokens																	DONE
   * replace *, ?, and + with appropriate stuff										DONE
   * replace English descriptions													DONE
@@ -13,7 +14,15 @@
   * $functions
   * consider removing synonyms (pro: fewer non-terminals; con: less abstraction)
   * identifier_hier probably allows for spaces between '.' but shouldn't
-  * fix shift/reduce conflicts
+*/
+
+/* Notes:
+  * Removed name_of_module. Just using IDENTIFIER.
+  * Removed name_of_instance. Just using IDENTIFIER range_opt.
+  * Removed name_of_UDP. Just using IDENTIFIER.
+  * Removed name_of_variable. Just using IDENTIFIER.
+  * Removed name_of_function. Just using IDENTIFIER (but maybe should use identifier_hier)
+  * Removed name_of_port. Just using IDENTIFIER.
 */
 
 /* Syntax */
@@ -29,9 +38,9 @@
 %token NOT_EQ               /*  !=  */
 %token EQ_EQ_EQ             /*  === */
 %token NOT_EQ_EQ            /*  !== */
-%token AMP_AMP              /*  &&  */
+%token LAND                 /*  &&  */
 %token AMP_AMP_AMP          /*  &&& */
-%token PIPE_PIPE            /*  ||  */
+%token LOR                  /*  ||  */
 %token LTE                  /*  <=  */
 %token GTE                  /*  >=  */
 %token CARET_TILDE          /*  ^~  */
@@ -40,6 +49,12 @@
 %token EQ_GT                /*  =>  */
 %token AST_GT               /*  *>  */
 %token HYPH_GT              /*  ->  */
+
+%left '+' '-'
+%left '*' '/' '%'
+%left '|' '&' '^' LAND LOR
+%right '=' NOT_EQ NOT_EQ_EQ
+%nonassoc '<' '>' LTE GTE
 
 %token SETUP
 %token HOLD
@@ -89,64 +104,55 @@
 %%
 
 source_text:
-	  description_list
+	  description_list ;
 
 description_list:    /* empty */
-	| description_list description
+	| description_list description ;
 
 description:
 	  module
-	| UDP
+	| UDP;
 
 module_item_list:        /* empty */
-	| module_item_list module_item
+	| module_item_list module_item;
 
 module:
-	  MODULE name_of_module list_of_ports_encl_opt ';'
+	  MODULE IDENTIFIER list_of_ports_encl_opt ';'
 		module_item_list
 		ENDMODULE
-	| MACROMODULE name_of_module list_of_ports_encl_opt ';'
+	| MACROMODULE IDENTIFIER list_of_ports_encl_opt ';'
 		module_item_list
-		ENDMODULE
-
-name_of_module:
-	  IDENTIFIER
+		ENDMODULE;
 
 list_of_ports_encl_opt: /* empty */
-	| list_of_ports_encl
+	| list_of_ports_encl;
 
 list_of_ports_encl:
-	  '(' list_of_ports ')'
+	  '(' list_of_ports ')';
 
 list_of_ports:
 	  port
-	| list_of_ports ',' port
+	| list_of_ports ',' port;
 
 port:
 	  port_expression_opt
-	| '.' name_of_port '(' port_expression_opt ')'
+	| '.' IDENTIFIER '(' port_expression_opt ')';
 
 port_expression_opt: /* empty */
-	| port_expression
+	| port_expression;
 
 port_expression:
 	  port_reference
-	| '{' port_reference_list '}'
+	| '{' port_reference_list '}';
 
 port_reference_list:
 	  port_reference
-	| port_reference_list ',' port_reference
+	| port_reference_list ',' port_reference;
 
 port_reference:
-	  name_of_variable
-	| name_of_variable '[' constant_expression ']'
-	| name_of_variable '[' constant_expression ':' constant_expression ']'
-
-name_of_port:
 	  IDENTIFIER
-
-name_of_variable:
-	  IDENTIFIER
+	| IDENTIFIER '[' constant_expression ']'
+	| IDENTIFIER '[' constant_expression ':' constant_expression ']';
 
 module_item:
 	  parameter_declaration
@@ -168,117 +174,111 @@ module_item:
 	| initial_statement
 	| always_statement
 	| task
-	| function
+	| function;
 
 UDP:
-	  PRIMITIVE name_of_UDP '(' list_of_variables  ')' ';'
+	  PRIMITIVE IDENTIFIER '(' list_of_variables  ')' ';'
 		UDP_declaration_list
 		UDP_initial_statement_opt
 		table_definition
-		ENDPRIMITIVE
-
-name_of_UDP:
-	  IDENTIFIER
+		ENDPRIMITIVE;
 
 UDP_declaration_list:
 	  UDP_declaration
-	| UDP_declaration_list UDP_declaration
+	| UDP_declaration_list UDP_declaration;
 
 UDP_declaration:
 	  output_declaration
 	| reg_declaration
-	| input_declaration
+	| input_declaration;
 
 UDP_initial_statement_opt: /* empty */
-	| UDP_initial_statement
+	| UDP_initial_statement;
 
 UDP_initial_statement:
-	  _INITIAL_ output_terminal_name '=' INIT_VAL ';'
+	  _INITIAL_ output_terminal_name '=' INIT_VAL ';';
 
 output_terminal_name:
-	  name_of_variable
+	  IDENTIFIER;
 
 table_definition:
-	  TABLE table_entries ENDTABLE
+	  TABLE table_entries ENDTABLE;
 
 table_entries:
 	  combinational_entry_list
-	| sequential_entry_list
+	| sequential_entry_list;
 
 combinational_entry_list:
 	  combinational_entry
-	| combinational_entry_list combinational_entry
+	| combinational_entry_list combinational_entry;
 
 combinational_entry:
-	  level_input_list ':' OUTPUT_SYMBOL ';'
+	  level_input_list ':' OUTPUT_SYMBOL ';';
 
 sequential_entry_list:
 	  sequential_entry
-	| sequential_entry_list sequential_entry
+	| sequential_entry_list sequential_entry;
 
 sequential_entry:
-	  input_list ':' state ':' next_state ';'
+	  input_list ':' state ':' next_state ';';
 
 input_list:
 	  level_input_list
-	| edge_input_list
+	| edge_input_list;
 
 level_input_list:
-	  level_symbol_plus
+	  level_symbol_plus;
 
 edge_input_list:
-	  level_symbol_star edge level_symbol_star
+	  level_symbol_star edge level_symbol_star;
 
 edge:
 	  '(' LEVEL_SYMBOL LEVEL_SYMBOL ')'
-	| EDGE_SYMBOL
+	| EDGE_SYMBOL;
 
 state:
-	  LEVEL_SYMBOL
+	  LEVEL_SYMBOL;
 
 next_state:
 	  OUTPUT_SYMBOL
-	| '-'
+	| '-';
 
 level_symbol_star:       /* star meaning 0 or more */
-	| level_symbol_star LEVEL_SYMBOL
+	| level_symbol_star LEVEL_SYMBOL;
 
 level_symbol_plus: /* plus meaning one or more */
 	  LEVEL_SYMBOL
-	| level_symbol_plus LEVEL_SYMBOL
+	| level_symbol_plus LEVEL_SYMBOL;
 
 task:
 	  TASK name_of_task ';'
 		tf_declaration_star
 		statement_or_null
-		ENDTASK
+		ENDTASK;
 
 name_of_task:
-	  IDENTIFIER
+	  IDENTIFIER;
 
 function:
-	  FUNCTION range_or_type_opt name_of_function ';'
+	  FUNCTION range_or_type_opt IDENTIFIER ';'
 		tf_declaration_plus
 		statement
-		ENDFUNCTION
+		ENDFUNCTION;
 
 range_or_type_opt: /* empty */
-	| range_or_type
+	| range_or_type;
 
 range_or_type:
 	  range
 	| INTEGER
-	| REAL
-
-name_of_function:
-	  IDENTIFIER
+	| REAL;
 
 tf_declaration_star: /* empty */
-	| tf_declaration_star tf_declaration
+	| tf_declaration_star tf_declaration;
 
 tf_declaration_plus: /* empty */
 	  tf_declaration
-	| tf_declaration_plus tf_declaration
+	| tf_declaration_plus tf_declaration;
 
 tf_declaration:
 	  parameter_declaration
@@ -288,24 +288,24 @@ tf_declaration:
 	| reg_declaration
 	| time_declaration
 	| integer_declaration
-	| real_declaration
+	| real_declaration;
 
 parameter_declaration:
-	  PARAMETER list_of_param_assignments ';'
+	  PARAMETER list_of_param_assignments ';';
 
 input_declaration:
-	  INPUT range_opt list_of_variables ';'
+	  INPUT range_opt list_of_variables ';';
 
 output_declaration:
-	  OUTPUT range_opt list_of_variables ';'
+	  OUTPUT range_opt list_of_variables ';';
 
 inout_declaration:
-	  INOUT range_opt list_of_variables ';'
+	  INOUT range_opt list_of_variables ';';
 
 net_declaration:
 	  NETTYPE expandrange_opt delay_opt list_of_variables ';'
 	| TRIREG charge_strength_opt expandrange_opt delay_opt list_of_variables ';'
-	| NETTYPE drive_strength_opt expandrange_opt delay_opt list_of_assignments ';'
+	| NETTYPE drive_strength_opt expandrange_opt delay_opt list_of_assignments ';';
 
 NETTYPE:
 	  WIRE
@@ -318,107 +318,104 @@ NETTYPE:
 	| SUPPLY1
 	| WOR
 	| TRIOR
-	| TRIREG
+	| TRIREG;
 
 expandrange_opt: /* empty */
-	| expandrange
+	| expandrange;
 
 expandrange:
 	  range
 	| SCALARED range
-	| VECTORED range
+	| VECTORED range;
 
 reg_declaration:
-	  REG range_opt list_of_register_variables ';'
+	  REG range_opt list_of_register_variables ';';
 
 time_declaration:
-	  TIME list_of_register_variables ';'
+	  TIME list_of_register_variables ';';
 
 integer_declaration:
-	  INTEGER list_of_register_variables ';'
+	  INTEGER list_of_register_variables ';';
 
 real_declaration:
-	  REAL list_of_variables ';'
+	  REAL list_of_variables ';';
 
 event_declaration:
-	  EVENT list_of_name_of_events ';'
+	  EVENT list_of_name_of_events ';';
 
 continuous_assign:
 	  ASSIGN drive_strength_opt delay_opt list_of_assignments ';'
-	| NETTYPE drive_strength_opt expandrange_opt delay_opt list_of_assignments ';'
+	| NETTYPE drive_strength_opt expandrange_opt delay_opt list_of_assignments ';';
 
 parameter_override:
-	  DEFPARAM list_of_param_assignments ';'
+	  DEFPARAM list_of_param_assignments ';';
 
 list_of_variables:
-	  name_of_variable
-	| list_of_variables ',' name_of_variable
-
-name_of_variable:
 	  IDENTIFIER
+	| list_of_variables ',' IDENTIFIER;
 
 list_of_register_variables:
 	  register_variable
-	| list_of_register_variables ',' register_variable
+	| list_of_register_variables ',' register_variable;
 
 register_variable:
 	  name_of_register
-	| name_of_memory '[' constant_expression ':' constant_expression ']'
+	| name_of_memory '[' constant_expression ':' constant_expression ']';
 
 name_of_register:
-	  IDENTIFIER
+	  IDENTIFIER;
 
 name_of_memory:
-	  IDENTIFIER
+	  IDENTIFIER;
 
 list_of_name_of_events:
 	  name_of_event
-	| list_of_name_of_events ',' name_of_event
+	| list_of_name_of_events ',' name_of_event;
 
 name_of_event:
-	  IDENTIFIER
+	  IDENTIFIER;
 
 charge_strength_opt: /* empty */
-	| charge_strength
+	| charge_strength;
 
 charge_strength:
 	  '(' SMALL ')'
 	| '(' MEDIUM ')'
-	| '(' LARGE ')'
+	| '(' LARGE ')';
 
 drive_strength_opt: /* empty */
-	| drive_strength
+	| drive_strength;
 
 drive_strength:
 	  '(' STRENGTH0 ',' STRENGTH1 ')'
-	| '(' STRENGTH1 ',' STRENGTH0 ')'
+	| '(' STRENGTH1 ',' STRENGTH0 ')';
 
 STRENGTH0:
 	  SUPPLY0
 	| STRONG0
 	| PULL0
 	| WEAK0
-	| HIGHZ0
+	| HIGHZ0;
 
 STRENGTH1:
 	  SUPPLY1
 	| STRONG1
 	| PULL1
 	| WEAK1
-	| HIGHZ1
+	| HIGHZ1;
 
 range_opt: /* empty */
-	| range
+	| range;
 
 range:
-	  '[' constant_expression ':' constant_expression ']'
+	  '[' constant_expression ':' constant_expression ']';
 
 list_of_assignments:
 	  assignment
-	| list_of_assignments ',' assignment
+	| list_of_assignments ',' assignment;
 
 gate_declaration:
-	  GATETYPE drive_strength_opt delay_opt  gate_instance_list ';'
+	  GATETYPE drive_strength_opt delay_opt  gate_instance_list ';';
 
 GATETYPE:
 	  AND
@@ -446,105 +443,95 @@ GATETYPE:
 	| TRANIF0
 	| RTRANIF0
 	| TRANIF1
-	| RTRANIF1
+	| RTRANIF1;
 
 gate_instance_list:
 	  gate_instance
-	| gate_instance_list ',' gate_instance
+	| gate_instance_list ',' gate_instance;
 
 gate_instance:
-	  name_of_gate_instance_opt '(' terminal_list ')'
+	  name_of_gate_instance_opt '(' terminal_list ')';
 
 name_of_gate_instance_opt: /* empty */
-	| name_of_gate_instance
+	| name_of_gate_instance;
 
 name_of_gate_instance:
-	  IDENTIFIER range_opt
+	  IDENTIFIER range_opt;
 
 UDP_instantiation:
-	  name_of_UDP drive_strength_opt delay_opt UDP_instance_list ';'
-
-name_of_UDP:
-	  IDENTIFIER
+	  IDENTIFIER drive_strength_opt delay_opt UDP_instance_list ';';
 
 UDP_instance_list:
 	  UDP_instance
-	| UDP_instance_list ',' UDP_instance
+	| UDP_instance_list ',' UDP_instance;
 
 UDP_instance:
-	  name_of_UDP_instance_opt '(' terminal_list ')'
+	  name_of_UDP_instance_opt '(' terminal_list ')';
 
 name_of_UDP_instance_opt: /* empty */
-	| name_of_UDP_instance
+	| name_of_UDP_instance;
 
 name_of_UDP_instance:
-	  IDENTIFIER range_opt
+	  IDENTIFIER range_opt;
 
 terminal_list:
 	  terminal
-	| terminal_list ',' terminal
+	| terminal_list ',' terminal;
 
 terminal:
 	  expression
-	| IDENTIFIER
+	| IDENTIFIER;
 
 module_instantiation:
-	  name_of_module parameter_value_assignment_opt
-		module_instance_list ';'
-
-name_of_module:
-	  IDENTIFIER
+	  IDENTIFIER parameter_value_assignment_opt module_instance_list ';';
 
 parameter_value_assignment_opt: /* empty */
-	| parameter_value_assignment
+	| parameter_value_assignment;
 
 parameter_value_assignment:
-	  '#' '(' expression_list ')'
+	  '#' '(' expression_list ')';
 
 module_instance_list:
 	  module_instance
-	| module_instance_list ',' module_instance
+	| module_instance_list ',' module_instance;
 
 module_instance:
-	  name_of_instance '(' list_of_module_connections_opt ')'
-
-name_of_instance:
-	  IDENTIFIER range_opt
+	  IDENTIFIER range_opt '(' list_of_module_connections_opt ')';
 
 list_of_module_connections_opt: /* empty */
-	| list_of_module_connections
+	| list_of_module_connections;
 
 list_of_module_connections:
 	  module_port_connection_list
-	| named_port_connection_list
+	| named_port_connection_list;
 
 module_port_connection_list:
 	  module_port_connection
-	| module_port_connection_list ',' module_port_connection
+	| module_port_connection_list ',' module_port_connection;
 
 module_port_connection: /* empty */
-	| expression
+	| expression;
 
 named_port_connection_list:
 	  named_port_connection
-	| named_port_connection_list ',' named_port_connection
+	| named_port_connection_list ',' named_port_connection;
 
 /* TODO: not supposed to allow for space. Maybe have lex make a special token */
 named_port_connection:
-	  '.' IDENTIFIER '(' expression ')'
+	  '.' IDENTIFIER '(' expression ')';
 
 initial_statement:
-	  _INITIAL_ statement
+	  _INITIAL_ statement;
 
 always_statement:
-	  ALWAYS statement
+	  ALWAYS statement;
 
 statement_or_null:
 	  statement
-	| ';'
+	| ';';
 
 statement_list: /* empty */
-	| statement_list statement
+	| statement_list statement;
 
 statement:
 	 blocking_assignment ';'
@@ -570,46 +557,46 @@ statement:
 	| ASSIGN assignment ';'
 	| DEASSIGN lvalue ';'
 	| FORCE assignment ';'
-	| RELEASE lvalue ';'
+	| RELEASE lvalue ';';
 
 assignment:
-	  lvalue '=' expression
+	  lvalue '=' expression;
 
 blocking_assignment:
 	  lvalue '=' expression
-	| lvalue '=' delay_or_event_control expression ';'
+	| lvalue '=' delay_or_event_control expression ';';
 
 non_blocking_assignment:
 	  lvalue LTE expression
-	| lvalue '=' delay_or_event_control expression ';'
+	| lvalue '=' delay_or_event_control expression ';';
 
 delay_or_event_control:
 	  delay_control
 	| event_control
-	| REPEAT '(' expression ')' event_control
+	| REPEAT '(' expression ')' event_control;
 
 case_item_list:
 	  case_item
-	| case_item_list case_item
+	| case_item_list case_item;
 
 case_item:
 	  expression_list ':' statement_or_null
 	| DEFAULT ':' statement_or_null
-	| DEFAULT statement_or_null
+	| DEFAULT statement_or_null;
 
 seq_block:
 	  _BEGIN_ statement_list END
-	| _BEGIN_ ':' name_of_block block_declaration_list statement_list END
+	| _BEGIN_ ':' name_of_block block_declaration_list statement_list END;
 
 par_block:
 	  FORK statement_list JOIN
-	| FORK ':' name_of_block block_declaration_list statement_list JOIN
+	| FORK ':' name_of_block block_declaration_list statement_list JOIN;
 
 name_of_block:
-	  IDENTIFIER
+	  IDENTIFIER;
 
 block_declaration_list: /* empty */
-	| block_declaration_list block_declaration
+	| block_declaration_list block_declaration;
 
 block_declaration:
 	  parameter_declaration
@@ -617,27 +604,27 @@ block_declaration:
 	| integer_declaration
 	| real_declaration
 	| time_declaration
-	| event_declaration
+	| event_declaration;
 
 task_enable:
 	  name_of_task
-	| name_of_task '(' expression_list ')' ';'
+	| name_of_task '(' expression_list ')' ';';
 
 system_task_enable:
 	  name_of_system_task ';'
-	| name_of_system_task '(' expression_list ')' ';'
+	| name_of_system_task '(' expression_list ')' ';';
 
 name_of_system_task:
-	  '$' system_identifier /* (Note: the $ may not be followed by a space.) */
+	  '$' system_identifier /* (Note: the $ may not be followed by a space.) */;
 
 system_identifier:
-	IDENTIFIER /* TODO: An IDENTIFIER assigned to an existing system task or function */
+	IDENTIFIER /* TODO: An IDENTIFIER assigned to an existing system task or function */;
 
 specify_block:
-	  SPECIFY specify_item_list ENDSPECIFY
+	  SPECIFY specify_item_list ENDSPECIFY;
 
 specify_item_list: /* empty */
-	| specify_item_list specify_item
+	| specify_item_list specify_item;
 
 specify_item:
 	  specparam_declaration
@@ -645,56 +632,56 @@ specify_item:
 	| level_sensitive_path_declaration
 	| edge_sensitive_path_declaration
 	| system_timing_check
-	| sdpd
+	| sdpd;
 
 specparam_declaration:
-	  SPECPARAM list_of_param_assignments ';'
+	  SPECPARAM list_of_param_assignments ';';
 
 list_of_param_assignments:
 	  param_assignment
-	| list_of_param_assignments ',' param_assignment
+	| list_of_param_assignments ',' param_assignment;
 
 param_assignment:
-	 identifier_hier '=' constant_expression
+	 identifier_hier '=' constant_expression;
 
 path_declaration:
-	  path_description '=' path_delay_value ';'
+	  path_description '=' path_delay_value ';';
 
 path_description:
 	  '(' specify_input_terminal_descriptor EQ_GT specify_output_terminal_descriptor ')'
-	| '(' list_of_path_inputs AST_GT list_of_path_outputs ')'
+	| '(' list_of_path_inputs AST_GT list_of_path_outputs ')';
 
 list_of_path_inputs:
-	  specify_input_terminal_descriptor_list
+	  specify_input_terminal_descriptor_list;
 
 list_of_path_outputs:
-	   specify_output_terminal_descriptor_list
+	   specify_output_terminal_descriptor_list;
 
 specify_input_terminal_descriptor_list:
 	  specify_input_terminal_descriptor
-	| specify_input_terminal_descriptor_list ',' specify_input_terminal_descriptor
+	| specify_input_terminal_descriptor_list ',' specify_input_terminal_descriptor;
 
 specify_input_terminal_descriptor:
 	  input_identifier
 	| input_identifier '[' constant_expression ']'
-	| input_identifier '[' constant_expression ':' constant_expression ']'
+	| input_identifier '[' constant_expression ':' constant_expression ']';
 
 specify_output_terminal_descriptor_list:
 	  specify_output_terminal_descriptor
-	| specify_output_terminal_descriptor_list ',' specify_output_terminal_descriptor
+	| specify_output_terminal_descriptor_list ',' specify_output_terminal_descriptor;
 
 specify_output_terminal_descriptor:
 	  output_identifier
 	| output_identifier '[' constant_expression ']'
-	| output_identifier '[' constant_expression ':' constant_expression ']'
+	| output_identifier '[' constant_expression ':' constant_expression ']';
 
 /* the IDENTIFIER of a module input or inout terminal */
 input_identifier:
-	  IDENTIFIER
+	  IDENTIFIER;
 
 /* the IDENTIFIER of a module output or inout terminal. */
 output_identifier:
-	  IDENTIFIER 
+	  IDENTIFIER ;
 
 path_delay_value:
 	  path_delay_expression
@@ -709,13 +696,13 @@ path_delay_value:
 		path_delay_expression',' path_delay_expression','
 		path_delay_expression',' path_delay_expression','
 		path_delay_expression',' path_delay_expression','
-		path_delay_expression',' path_delay_expression ')'
+		path_delay_expression',' path_delay_expression ')';
 
 path_delay_expression:
-	  mintypmax_expression
+	  mintypmax_expression;
 
 comma_const_exp_comma_notify_reg_opt: /* empty */
-	| ',' constant_expression ',' notify_register
+	| ',' constant_expression ',' notify_register;
 
 system_timing_check:
 	  '$' SETUP     '(' timing_check_event ',' timing_check_event ',' timing_check_limit comma_notify_register_opt ')' ';'
@@ -724,41 +711,41 @@ system_timing_check:
 	| '$' WIDTH     '(' controlled_timing_check_event ',' timing_check_limit comma_const_exp_comma_notify_reg_opt ')' ';'
 	| '$' SKEW      '(' timing_check_event ',' timing_check_event ',' timing_check_limit comma_notify_register_opt ')' ';'
 	| '$' RECOVERY  '(' controlled_timing_check_event ',' timing_check_event ',' timing_check_limit comma_notify_register_opt ')' ';'
-	| '$' SETUPHOLD '(' timing_check_event ',' timing_check_event ',' timing_check_limit',' timing_check_limit comma_notify_register_opt ')' ';'
+	| '$' SETUPHOLD '(' timing_check_event ',' timing_check_event ',' timing_check_limit',' timing_check_limit comma_notify_register_opt ')' ';';
 
 timing_check_event:
 	  timing_check_event_control_opt specify_terminal_descriptor
-		amp_timing_check_condition_opt
+		amp_timing_check_condition_opt;
 
 specify_terminal_descriptor:
 	  specify_input_terminal_descriptor
-	|specify_output_terminal_descriptor
+	|specify_output_terminal_descriptor;
 
 controlled_timing_check_event:
 	  timing_check_event_control specify_terminal_descriptor
-		amp_timing_check_condition_opt
+		amp_timing_check_condition_opt;
 
 timing_check_event_control_opt: /* empty */
-	| timing_check_event_control
+	| timing_check_event_control;
 
 timing_check_event_control:
 	  POSEDGE
 	| NEGEDGE
-	| edge_control_specifier
+	| edge_control_specifier;
 
 edge_control_specifier:
-	  EDGE  '[' edge_descriptor_list ']'
+	  EDGE  '[' edge_descriptor_list ']';
 
 edge_descriptor_list:
 	  EDGE_DESCRIPTOR
-	| edge_descriptor_list ',' EDGE_DESCRIPTOR
+	| edge_descriptor_list ',' EDGE_DESCRIPTOR;
 
 amp_timing_check_condition_opt: /* empty */
-	| AMP_AMP_AMP timing_check_condition
+	| AMP_AMP_AMP timing_check_condition;
 
 timing_check_condition:
 	  scalar_timing_check_condition
-	| '(' scalar_timing_check_condition ')'
+	| '(' scalar_timing_check_condition ')';
 
 scalar_timing_check_condition:
 	  scalar_expression
@@ -766,22 +753,21 @@ scalar_timing_check_condition:
 	| scalar_expression EQ_EQ SCALAR_CONSTANT
 	| scalar_expression EQ_EQ_EQ SCALAR_CONSTANT
 	| scalar_expression NOT_EQ SCALAR_CONSTANT
-	| scalar_expression NOT_EQ_EQ SCALAR_CONSTANT
-
+	| scalar_expression NOT_EQ_EQ SCALAR_CONSTANT;
 
 /*	TODO: A scalar expression is a one bit net or a bit-select of an expanded vector net. */
 scalar_expression:
 	  identifier_hier
-	| identifier_hier '[' expression ']'
+	| identifier_hier '[' expression ']';
 
 timing_check_limit:
-	  expression
+	  expression;
 
 comma_notify_register_opt: /* empty */
-	| ',' notify_register
+	| ',' notify_register;
 
 notify_register:
-	  identifier_hier
+	  identifier_hier;
 
 level_sensitive_path_declaration:
 	  IF '(' conditional_port_expression')'
@@ -789,22 +775,22 @@ level_sensitive_path_declaration:
 		specify_output_terminal_descriptor ')' '=' path_delay_value ';'
 	| IF '(' conditional_port_expression ')'
 		'(' list_of_path_inputs polarity_operator_opt AST_GT
-		list_of_path_outputs ')' '=' path_delay_value ';'
+		list_of_path_outputs ')' '=' path_delay_value ';';
 
 conditional_port_expression:
 	  port_reference
 	| UNARY_OPERATOR port_reference
-	| port_reference BINARY_OPERATOR port_reference
+	| port_reference BINARY_OPERATOR port_reference;
 
 polarity_operator_opt: /* empty */
-	| polarity_operator
+	| polarity_operator;
 
 polarity_operator:
 	  '+'
-	| '-'
+	| '-';
 
 if_expression_opt: /* empty */
-	| IF '(' expression ')'
+	| IF '(' expression ')';
 
 edge_sensitive_path_declaration:
 	  if_expression_opt '(' edge_identifier_opt
@@ -814,52 +800,52 @@ edge_sensitive_path_declaration:
 	| if_expression_opt '(' edge_identifier_opt
 		specify_input_terminal_descriptor AST_GT
 		'(' list_of_path_outputs polarity_operator_opt
-		':' data_source_expression ')' ')' '=' path_delay_value ';'
+		':' data_source_expression ')' ')' '=' path_delay_value ';';
 
 /* TODO: should this actually be expression list? */
 data_source_expression:
-	  expression
+	  expression;
 
 edge_identifier_opt: /* empty */
-	| edge_identifier
+	| edge_identifier;
 
 edge_identifier:
 	  POSEDGE
-	| NEGEDGE
+	| NEGEDGE;
 
 sdpd:
-	 IF '(' sdpd_conditional_expression ')' path_description '=' path_delay_value ';'
+	 IF '(' sdpd_conditional_expression ')' path_description '=' path_delay_value ';';
 
 sdpd_conditional_expression:
 	  expression BINARY_OPERATOR expression
-	| UNARY_OPERATOR expression
+	| UNARY_OPERATOR expression;
 
 lvalue:
 	  identifier_hier
 	| identifier_hier '[' expression ']'
 	| identifier_hier '[' constant_expression ':' constant_expression ']'
-	| concatenation
+	| concatenation;
 
 constant_expression:
-	 expression
+	 expression;
 
 comma_mintypmax_expression_opt: /* empty */
-	| ',' mintypmax_expression
+	| ',' mintypmax_expression;
 
 mintypmax_expression:
 	  expression
-	| expression ':' expression ':' expression
+	| expression ':' expression ':' expression;
 
 expression_list:
 	  expression
-	| expression_list ',' expression
+	| expression_list ',' expression;
 
 expression:
 	  primary
 	| UNARY_OPERATOR primary
 	| expression BINARY_OPERATOR expression
 	| expression '?' expression ':' expression
-	| STRING
+	| STRING;
 
 UNARY_OPERATOR:
 	  '+'
@@ -871,7 +857,7 @@ UNARY_OPERATOR:
 	| '|'
 	| CARET_PIPE
 	| '^'
-	| TILDE_CARET
+	| TILDE_CARET;
 
 BINARY_OPERATOR:
 	  '+'
@@ -883,8 +869,8 @@ BINARY_OPERATOR:
 	| NOT_EQ
 	| EQ_EQ_EQ
 	| NOT_EQ_EQ
-	| AMP_AMP
-	| PIPE_PIPE
+	| LAND
+	| LOR
 	| '<'
 	| LTE
 	| '>'
@@ -894,7 +880,7 @@ BINARY_OPERATOR:
 	| '^'
 	| CARET_TILDE
 	| RSHIFT
-	| LSHIFT
+	| LSHIFT;
 
 primary:
 	  number
@@ -904,13 +890,13 @@ primary:
 	| concatenation
 	| multiple_concatenation
 	| function_call
-	| '(' mintypmax_expression ')'
+	| '(' mintypmax_expression ')';
 
 unsigned_number_opt:
-	| UNSIGNED_NUMBER
+	| UNSIGNED_NUMBER;
 
 dot_unsigned_number_opt: /* empty */
-	| '.' UNSIGNED_NUMBER
+	| '.' UNSIGNED_NUMBER;
 
 /* TODO: should this be a token? */
 /*	(Note: embedded spaces are illegal in Verilog numbers, but embedded underscore
@@ -922,60 +908,57 @@ number:
 	| DECIMAL_NUMBER dot_unsigned_number_opt
 		'E' DECIMAL_NUMBER
 	| DECIMAL_NUMBER dot_unsigned_number_opt
-		'e' DECIMAL_NUMBER
+		'e' DECIMAL_NUMBER;
 
 concatenation:
-	  '{' expression_list '}'
+	  '{' expression_list '}';
 
 multiple_concatenation:
-	  '{' expression '{' expression_list '}' '}'
+	  '{' expression '{' expression_list '}' '}';
 
 function_call:
-	  name_of_function '(' expression_list ')'
+	  IDENTIFIER '(' expression_list ')'
 	| name_of_system_function '(' expression_list ')'
-	| name_of_system_function
-
-name_of_function:
-	  identifier_hier
+	| name_of_system_function;
 
 name_of_system_function:
-	  '$' system_identifier /* TODO: the $ may not be followed by a space. */
+	  '$' system_identifier; /* TODO: the $ may not be followed by a space. */
 
 /* TODO: this should probably be a token to disallow whitespace between identifiers */
 identifier_hier:
 	  IDENTIFIER
-	| identifier_hier '.' IDENTIFIER
+	| identifier_hier '.' IDENTIFIER;
 
 delay_opt: /* empty */
-	| delay
+	| delay;
 
 delay:
 	  '#' number
 	| '#' identifier_hier
-	| '#' '(' mintypmax_expression comma_mintypmax_expression_opt comma_mintypmax_expression_opt ')'
-		
+	| '#' '(' mintypmax_expression comma_mintypmax_expression_opt comma_mintypmax_expression_opt ')';
+
 delay_control:
 	  '#' number
 	| '#' identifier_hier
-	| '#' '(' mintypmax_expression ')'
+	| '#' '(' mintypmax_expression ')';
 
 event_control:
 	  '@' identifier_hier
-	| '@' '(' event_expression ')'
+	| '@' '(' event_expression ')';
 
 event_expression:
 	  expression
 	| POSEDGE scalar_event_expression
 	| NEGEDGE scalar_event_expression
-	| event_expression OR event_expression
+	| event_expression OR event_expression;
 
 /* Scalar event expression is an expression that resolves to a one bit value.
    Compiler needs to confirm that this identifier is only 1 bit. */
 scalar_event_expression:
-	  name_of_variable
+	  IDENTIFIER;
 
 /* NOTE: the lexer will remove comments */
-/*
+/*;
 comment:
 	  short_comment
 	| long_comment
@@ -995,6 +978,7 @@ comment_text:
 
 main()
 {
+    yydebug = 1;
 	return(yyparse());
 }
 

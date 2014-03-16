@@ -1,0 +1,105 @@
+Starting parse
+Entering state 0
+Reducing stack by rule 2 (line 108):
+-> $$ = nterm description_list ()
+Stack now 0
+Entering state 2
+Reading a token: Next token is token MODULE ()
+Shifting token MODULE ()
+Entering state 5
+Reading a token: Next token is token IDENTIFIER ()
+Shifting token IDENTIFIER ()
+Entering state 11
+Reading a token: Next token is token '(' ()
+Shifting token '(' ()
+Entering state 13
+Reading a token: Next token is token IDENTIFIER ()
+Shifting token IDENTIFIER ()
+Entering state 20
+Reading a token: Next token is token ',' ()
+Reducing stack by rule 23 (line 152):
+   $1 = token IDENTIFIER ()
+-> $$ = nterm port_reference ()
+Stack now 0 2 5 11 13
+Entering state 25
+Reducing stack by rule 19 (line 144):
+   $1 = nterm port_reference ()
+-> $$ = nterm port_expression ()
+Stack now 0 2 5 11 13
+Entering state 24
+Reducing stack by rule 18 (line 141):
+   $1 = nterm port_expression ()
+-> $$ = nterm port_expression_opt ()
+Stack now 0 2 5 11 13
+Entering state 23
+Reducing stack by rule 15 (line 137):
+   $1 = nterm port_expression_opt ()
+-> $$ = nterm port ()
+Stack now 0 2 5 11 13
+Entering state 22
+Reducing stack by rule 13 (line 133):
+   $1 = nterm port ()
+-> $$ = nterm list_of_ports ()
+Stack now 0 2 5 11 13
+Entering state 21
+Next token is token ',' ()
+Shifting token ',' ()
+Entering state 36
+Reading a token: Next token is token IDENTIFIER ()
+Shifting token IDENTIFIER ()
+Entering state 20
+Reading a token: Next token is token ')' ()
+Reducing stack by rule 23 (line 152):
+   $1 = token IDENTIFIER ()
+-> $$ = nterm port_reference ()
+Stack now 0 2 5 11 13 21 36
+Entering state 25
+Reducing stack by rule 19 (line 144):
+   $1 = nterm port_reference ()
+-> $$ = nterm port_expression ()
+Stack now 0 2 5 11 13 21 36
+Entering state 24
+Reducing stack by rule 18 (line 141):
+   $1 = nterm port_expression ()
+-> $$ = nterm port_expression_opt ()
+Stack now 0 2 5 11 13 21 36
+Entering state 23
+Reducing stack by rule 15 (line 137):
+   $1 = nterm port_expression_opt ()
+-> $$ = nterm port ()
+Stack now 0 2 5 11 13 21 36
+Entering state 72
+Reducing stack by rule 14 (line 134):
+   $1 = nterm list_of_ports ()
+   $2 = token ',' ()
+   $3 = nterm port ()
+-> $$ = nterm list_of_ports ()
+Stack now 0 2 5 11 13
+Entering state 21
+Next token is token ')' ()
+Shifting token ')' ()
+Entering state 35
+Reducing stack by rule 12 (line 130):
+   $1 = token '(' ()
+   $2 = nterm list_of_ports ()
+   $3 = token ')' ()
+-> $$ = nterm list_of_ports_encl ()
+Stack now 0 2 5 11
+Entering state 15
+Reducing stack by rule 11 (line 127):
+   $1 = nterm list_of_ports_encl ()
+-> $$ = nterm list_of_ports_encl_opt ()
+Stack now 0 2 5 11
+Entering state 16
+Reading a token: Next token is token WIRE ()
+syntax error
+Error: popping nterm list_of_ports_encl_opt ()
+Stack now 0 2 5 11
+Error: popping token IDENTIFIER ()
+Stack now 0 2 5
+Error: popping token MODULE ()
+Stack now 0 2
+Error: popping nterm description_list ()
+Stack now 0
+Cleanup: discarding lookahead token WIRE ()
+Stack now 0
