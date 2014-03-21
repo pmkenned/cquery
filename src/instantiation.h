@@ -13,7 +13,8 @@ class Module; // contains Module* member
 
 // TODO: int should be expression
 // should string actually be signal? we may only need the name
-typedef std::list<std::pair<string, int> > PortMap;
+typedef std::pair<string, string> Port;
+typedef std::list<Port> PortMap;
 
 class Instantiation {
 
@@ -22,13 +23,13 @@ class Instantiation {
         Module * module_type;
         Instantiation * parent;
         std::list<Instantiation> insts;
-        PortMap p;
+        PortMap pm;
 
     public:
         // constructors
         Instantiation() { }
-        Instantiation(Module * mt, Instantiation * p, string n = "") : 
-            module_type(mt), parent(p), name(n)
+        Instantiation(Module * mt, Instantiation * p, string n = "", PortMap pm_arg = PortMap()) : 
+            module_type(mt), parent(p), name(n), pm(pm_arg)
             { }
 
         // accessors
@@ -40,13 +41,17 @@ class Instantiation {
             insts.push_back(inst);
         }
 
-        void print_hierarchy(int n=1) {
-
+        void print_hierarchy(int n=0) {
             std::list<Instantiation>::iterator i;
+            for(int j=0; j<n; j++)
+                std::cout << "  ";
+            std::cout << name << '(';
+            PortMap::iterator j;
+            for(j = pm.begin(); j != pm.end(); j++ ) {
+                std::cout << j->first << ", ";
+            }
+            std::cout <<  ')' << std::endl;
             for(i = insts.begin(); i != insts.end(); i++ ) {
-                for(int j=0; j<n; j++)
-                    std::cout << "  ";
-                std::cout << i->get_name() << std::endl;
                 i->print_hierarchy(n+1);
             }
         }

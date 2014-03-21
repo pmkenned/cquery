@@ -46,287 +46,820 @@ extern int yydebug;
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     TILDE_AMP = 258,
-     CARET_PIPE = 259,
-     TILDE_CARET = 260,
-     EQ_EQ = 261,
-     NOT_EQ = 262,
-     EQ_EQ_EQ = 263,
-     NOT_EQ_EQ = 264,
-     LAND = 265,
-     AMP_AMP_AMP = 266,
-     LOR = 267,
-     LTE = 268,
-     GTE = 269,
-     CARET_TILDE = 270,
-     LSHIFT = 271,
-     RSHIFT = 272,
-     EQ_GT = 273,
-     AST_GT = 274,
-     HYPH_GT = 275,
-     SETUP = 276,
-     HOLD = 277,
-     PERIOD = 278,
-     WIDTH = 279,
-     SKEW = 280,
-     RECOVERY = 281,
-     SETUPHOLD = 282,
-     _BEGIN_ = 283,
-     END = 284,
-     MACROMODULE = 285,
-     MODULE = 286,
-     ENDMODULE = 287,
-     PRIMITIVE = 288,
-     ENDPRIMITIVE = 289,
-     TABLE = 290,
-     ENDTABLE = 291,
-     TASK = 292,
-     ENDTASK = 293,
-     FUNCTION = 294,
-     ENDFUNCTION = 295,
-     SPECIFY = 296,
-     ENDSPECIFY = 297,
-     INTEGER = 298,
-     REAL = 299,
-     TIME = 300,
-     SPECPARAM = 301,
-     PARAMETER = 302,
-     DEFPARAM = 303,
-     INPUT = 304,
-     OUTPUT = 305,
-     INOUT = 306,
-     WIRE = 307,
-     TRI = 308,
-     TRI0 = 309,
-     TRI1 = 310,
-     SUPPLY0 = 311,
-     SUPPLY1 = 312,
-     WAND = 313,
-     TRIAND = 314,
-     TRIOR = 315,
-     WOR = 316,
-     TRIREG = 317,
-     SCALARED = 318,
-     VECTORED = 319,
-     REG = 320,
-     EVENT = 321,
-     SMALL = 322,
-     MEDIUM = 323,
-     LARGE = 324,
-     STRONG0 = 325,
-     STRONG1 = 326,
-     PULL0 = 327,
-     PULL1 = 328,
-     WEAK0 = 329,
-     WEAK1 = 330,
-     HIGHZ0 = 331,
-     HIGHZ1 = 332,
-     AND = 333,
-     NAND = 334,
-     OR = 335,
-     NOR = 336,
-     XOR = 337,
-     XNOR = 338,
-     BUF = 339,
-     BUFIF0 = 340,
-     BUFIF1 = 341,
-     NOT = 342,
-     NOTIF0 = 343,
-     NOTIF1 = 344,
-     PULLDOWN = 345,
-     PULLUP = 346,
-     NMOS = 347,
-     RNMOS = 348,
-     PMOS = 349,
-     RPMOS = 350,
-     CMOS = 351,
-     RCMOS = 352,
-     TRAN = 353,
-     RTRAN = 354,
-     TRANIF0 = 355,
-     TRANIF1 = 356,
-     RTRANIF0 = 357,
-     RTRANIF1 = 358,
-     ASSIGN = 359,
-     DEASSIGN = 360,
-     _INITIAL_ = 361,
-     ALWAYS = 362,
-     IF = 363,
-     ELSE = 364,
-     CASE = 365,
-     CASEZ = 366,
-     CASEX = 367,
-     ENDCASE = 368,
-     DEFAULT = 369,
-     FOREVER = 370,
-     REPEAT = 371,
-     WHILE = 372,
-     FOR = 373,
-     WAIT = 374,
-     DISABLE = 375,
-     FORCE = 376,
-     RELEASE = 377,
-     FORK = 378,
-     JOIN = 379,
-     POSEDGE = 380,
-     NEGEDGE = 381,
-     EDGE = 382,
-     OUTPUT_SYMBOL = 383,
-     INIT_VAL = 384,
-     STRING = 385,
-     IDENTIFIER = 386,
-     DECIMAL_NUMBER = 387,
-     UNSIGNED_NUMBER = 388,
-     BASE = 389,
-     SCALAR_CONSTANT = 390,
-     LEVEL_SYMBOL = 391,
-     EDGE_SYMBOL = 392,
-     EDGE_DESCRIPTOR = 393
+     IDENTIFIER = 258,
+     SYSTEM_IDENTIFIER = 259,
+     STRING = 260,
+     TIME_LITERAL = 261,
+     TYPE_IDENTIFIER = 262,
+     PACKAGE_IDENTIFIER = 263,
+     DISCIPLINE_IDENTIFIER = 264,
+     PATHPULSE_IDENTIFIER = 265,
+     BASED_NUMBER = 266,
+     DEC_NUMBER = 267,
+     UNBASED_NUMBER = 268,
+     REALTIME = 269,
+     K_PLUS_EQ = 270,
+     K_MINUS_EQ = 271,
+     K_INCR = 272,
+     K_DECR = 273,
+     K_LE = 274,
+     K_GE = 275,
+     K_EG = 276,
+     K_EQ = 277,
+     K_NE = 278,
+     K_CEQ = 279,
+     K_CNE = 280,
+     K_LP = 281,
+     K_LS = 282,
+     K_RS = 283,
+     K_RSS = 284,
+     K_SG = 285,
+     K_CONTRIBUTE = 286,
+     K_PO_POS = 287,
+     K_PO_NEG = 288,
+     K_POW = 289,
+     K_PSTAR = 290,
+     K_STARP = 291,
+     K_DOTSTAR = 292,
+     K_LOR = 293,
+     K_LAND = 294,
+     K_NAND = 295,
+     K_NOR = 296,
+     K_NXOR = 297,
+     K_TRIGGER = 298,
+     K_SCOPE_RES = 299,
+     K_edge_descriptor = 300,
+     K_always = 301,
+     K_and = 302,
+     K_assign = 303,
+     K_begin = 304,
+     K_buf = 305,
+     K_bufif0 = 306,
+     K_bufif1 = 307,
+     K_case = 308,
+     K_casex = 309,
+     K_casez = 310,
+     K_cmos = 311,
+     K_deassign = 312,
+     K_default = 313,
+     K_defparam = 314,
+     K_disable = 315,
+     K_edge = 316,
+     K_else = 317,
+     K_end = 318,
+     K_endcase = 319,
+     K_endfunction = 320,
+     K_endmodule = 321,
+     K_endprimitive = 322,
+     K_endspecify = 323,
+     K_endtable = 324,
+     K_endtask = 325,
+     K_event = 326,
+     K_for = 327,
+     K_force = 328,
+     K_forever = 329,
+     K_fork = 330,
+     K_function = 331,
+     K_highz0 = 332,
+     K_highz1 = 333,
+     K_if = 334,
+     K_ifnone = 335,
+     K_initial = 336,
+     K_inout = 337,
+     K_input = 338,
+     K_integer = 339,
+     K_join = 340,
+     K_large = 341,
+     K_macromodule = 342,
+     K_medium = 343,
+     K_module = 344,
+     K_nand = 345,
+     K_negedge = 346,
+     K_nmos = 347,
+     K_nor = 348,
+     K_not = 349,
+     K_notif0 = 350,
+     K_notif1 = 351,
+     K_or = 352,
+     K_output = 353,
+     K_parameter = 354,
+     K_pmos = 355,
+     K_posedge = 356,
+     K_primitive = 357,
+     K_pull0 = 358,
+     K_pull1 = 359,
+     K_pulldown = 360,
+     K_pullup = 361,
+     K_rcmos = 362,
+     K_real = 363,
+     K_realtime = 364,
+     K_reg = 365,
+     K_release = 366,
+     K_repeat = 367,
+     K_rnmos = 368,
+     K_rpmos = 369,
+     K_rtran = 370,
+     K_rtranif0 = 371,
+     K_rtranif1 = 372,
+     K_scalared = 373,
+     K_small = 374,
+     K_specify = 375,
+     K_specparam = 376,
+     K_strong0 = 377,
+     K_strong1 = 378,
+     K_supply0 = 379,
+     K_supply1 = 380,
+     K_table = 381,
+     K_task = 382,
+     K_time = 383,
+     K_tran = 384,
+     K_tranif0 = 385,
+     K_tranif1 = 386,
+     K_tri = 387,
+     K_tri0 = 388,
+     K_tri1 = 389,
+     K_triand = 390,
+     K_trior = 391,
+     K_trireg = 392,
+     K_vectored = 393,
+     K_wait = 394,
+     K_wand = 395,
+     K_weak0 = 396,
+     K_weak1 = 397,
+     K_while = 398,
+     K_wire = 399,
+     K_wor = 400,
+     K_xnor = 401,
+     K_xor = 402,
+     K_Shold = 403,
+     K_Snochange = 404,
+     K_Speriod = 405,
+     K_Srecovery = 406,
+     K_Ssetup = 407,
+     K_Ssetuphold = 408,
+     K_Sskew = 409,
+     K_Swidth = 410,
+     KK_attribute = 411,
+     K_bool = 412,
+     K_logic = 413,
+     K_automatic = 414,
+     K_endgenerate = 415,
+     K_generate = 416,
+     K_genvar = 417,
+     K_localparam = 418,
+     K_noshowcancelled = 419,
+     K_pulsestyle_onevent = 420,
+     K_pulsestyle_ondetect = 421,
+     K_showcancelled = 422,
+     K_signed = 423,
+     K_unsigned = 424,
+     K_Sfullskew = 425,
+     K_Srecrem = 426,
+     K_Sremoval = 427,
+     K_Stimeskew = 428,
+     K_cell = 429,
+     K_config = 430,
+     K_design = 431,
+     K_endconfig = 432,
+     K_incdir = 433,
+     K_include = 434,
+     K_instance = 435,
+     K_liblist = 436,
+     K_library = 437,
+     K_use = 438,
+     K_wone = 439,
+     K_uwire = 440,
+     K_alias = 441,
+     K_always_comb = 442,
+     K_always_ff = 443,
+     K_always_latch = 444,
+     K_assert = 445,
+     K_assume = 446,
+     K_before = 447,
+     K_bind = 448,
+     K_bins = 449,
+     K_binsof = 450,
+     K_bit = 451,
+     K_break = 452,
+     K_byte = 453,
+     K_chandle = 454,
+     K_class = 455,
+     K_clocking = 456,
+     K_const = 457,
+     K_constraint = 458,
+     K_context = 459,
+     K_continue = 460,
+     K_cover = 461,
+     K_covergroup = 462,
+     K_coverpoint = 463,
+     K_cross = 464,
+     K_dist = 465,
+     K_do = 466,
+     K_endclass = 467,
+     K_endclocking = 468,
+     K_endgroup = 469,
+     K_endinterface = 470,
+     K_endpackage = 471,
+     K_endprogram = 472,
+     K_endproperty = 473,
+     K_endsequence = 474,
+     K_enum = 475,
+     K_expect = 476,
+     K_export = 477,
+     K_extends = 478,
+     K_extern = 479,
+     K_final = 480,
+     K_first_match = 481,
+     K_foreach = 482,
+     K_forkjoin = 483,
+     K_iff = 484,
+     K_ignore_bins = 485,
+     K_illegal_bins = 486,
+     K_import = 487,
+     K_inside = 488,
+     K_int = 489,
+     K_interface = 490,
+     K_intersect = 491,
+     K_join_any = 492,
+     K_join_none = 493,
+     K_local = 494,
+     K_longint = 495,
+     K_matches = 496,
+     K_modport = 497,
+     K_new = 498,
+     K_null = 499,
+     K_package = 500,
+     K_packed = 501,
+     K_priority = 502,
+     K_program = 503,
+     K_property = 504,
+     K_protected = 505,
+     K_pure = 506,
+     K_rand = 507,
+     K_randc = 508,
+     K_randcase = 509,
+     K_randsequence = 510,
+     K_ref = 511,
+     K_return = 512,
+     K_sequence = 513,
+     K_shortint = 514,
+     K_shortreal = 515,
+     K_solve = 516,
+     K_static = 517,
+     K_string = 518,
+     K_struct = 519,
+     K_super = 520,
+     K_tagged = 521,
+     K_this = 522,
+     K_throughout = 523,
+     K_timeprecision = 524,
+     K_timeunit = 525,
+     K_type = 526,
+     K_typedef = 527,
+     K_union = 528,
+     K_unique = 529,
+     K_var = 530,
+     K_virtual = 531,
+     K_void = 532,
+     K_wait_order = 533,
+     K_wildcard = 534,
+     K_with = 535,
+     K_within = 536,
+     K_timeprecision_check = 537,
+     K_timeunit_check = 538,
+     K_accept_on = 539,
+     K_checker = 540,
+     K_endchecker = 541,
+     K_eventually = 542,
+     K_global = 543,
+     K_implies = 544,
+     K_let = 545,
+     K_nexttime = 546,
+     K_reject_on = 547,
+     K_restrict = 548,
+     K_s_always = 549,
+     K_s_eventually = 550,
+     K_s_nexttime = 551,
+     K_s_until = 552,
+     K_s_until_with = 553,
+     K_strong = 554,
+     K_sync_accept_on = 555,
+     K_sync_reject_on = 556,
+     K_unique0 = 557,
+     K_until = 558,
+     K_until_with = 559,
+     K_untyped = 560,
+     K_weak = 561,
+     K_implements = 562,
+     K_interconnect = 563,
+     K_nettype = 564,
+     K_soft = 565,
+     K_above = 566,
+     K_abs = 567,
+     K_absdelay = 568,
+     K_abstol = 569,
+     K_access = 570,
+     K_acos = 571,
+     K_acosh = 572,
+     K_ac_stim = 573,
+     K_aliasparam = 574,
+     K_analog = 575,
+     K_analysis = 576,
+     K_asin = 577,
+     K_asinh = 578,
+     K_atan = 579,
+     K_atan2 = 580,
+     K_atanh = 581,
+     K_branch = 582,
+     K_ceil = 583,
+     K_connect = 584,
+     K_connectmodule = 585,
+     K_connectrules = 586,
+     K_continuous = 587,
+     K_cos = 588,
+     K_cosh = 589,
+     K_ddt = 590,
+     K_ddt_nature = 591,
+     K_ddx = 592,
+     K_discipline = 593,
+     K_discrete = 594,
+     K_domain = 595,
+     K_driver_update = 596,
+     K_endconnectrules = 597,
+     K_enddiscipline = 598,
+     K_endnature = 599,
+     K_endparamset = 600,
+     K_exclude = 601,
+     K_exp = 602,
+     K_final_step = 603,
+     K_flicker_noise = 604,
+     K_floor = 605,
+     K_flow = 606,
+     K_from = 607,
+     K_ground = 608,
+     K_hypot = 609,
+     K_idt = 610,
+     K_idtmod = 611,
+     K_idt_nature = 612,
+     K_inf = 613,
+     K_initial_step = 614,
+     K_laplace_nd = 615,
+     K_laplace_np = 616,
+     K_laplace_zd = 617,
+     K_laplace_zp = 618,
+     K_last_crossing = 619,
+     K_limexp = 620,
+     K_ln = 621,
+     K_log = 622,
+     K_max = 623,
+     K_merged = 624,
+     K_min = 625,
+     K_nature = 626,
+     K_net_resolution = 627,
+     K_noise_table = 628,
+     K_paramset = 629,
+     K_potential = 630,
+     K_pow = 631,
+     K_resolveto = 632,
+     K_sin = 633,
+     K_sinh = 634,
+     K_slew = 635,
+     K_split = 636,
+     K_sqrt = 637,
+     K_tan = 638,
+     K_tanh = 639,
+     K_timer = 640,
+     K_transition = 641,
+     K_units = 642,
+     K_white_noise = 643,
+     K_wreal = 644,
+     K_zi_nd = 645,
+     K_zi_np = 646,
+     K_zi_zd = 647,
+     K_zi_zp = 648,
+     K_TAND = 649,
+     K_OR_EQ = 650,
+     K_AND_EQ = 651,
+     K_MOD_EQ = 652,
+     K_DIV_EQ = 653,
+     K_MUL_EQ = 654,
+     K_RSS_EQ = 655,
+     K_RS_EQ = 656,
+     K_LS_EQ = 657,
+     K_XOR_EQ = 658,
+     UNARY_PREC = 659,
+     less_than_K_else = 660
    };
 #endif
 /* Tokens.  */
-#define TILDE_AMP 258
-#define CARET_PIPE 259
-#define TILDE_CARET 260
-#define EQ_EQ 261
-#define NOT_EQ 262
-#define EQ_EQ_EQ 263
-#define NOT_EQ_EQ 264
-#define LAND 265
-#define AMP_AMP_AMP 266
-#define LOR 267
-#define LTE 268
-#define GTE 269
-#define CARET_TILDE 270
-#define LSHIFT 271
-#define RSHIFT 272
-#define EQ_GT 273
-#define AST_GT 274
-#define HYPH_GT 275
-#define SETUP 276
-#define HOLD 277
-#define PERIOD 278
-#define WIDTH 279
-#define SKEW 280
-#define RECOVERY 281
-#define SETUPHOLD 282
-#define _BEGIN_ 283
-#define END 284
-#define MACROMODULE 285
-#define MODULE 286
-#define ENDMODULE 287
-#define PRIMITIVE 288
-#define ENDPRIMITIVE 289
-#define TABLE 290
-#define ENDTABLE 291
-#define TASK 292
-#define ENDTASK 293
-#define FUNCTION 294
-#define ENDFUNCTION 295
-#define SPECIFY 296
-#define ENDSPECIFY 297
-#define INTEGER 298
-#define REAL 299
-#define TIME 300
-#define SPECPARAM 301
-#define PARAMETER 302
-#define DEFPARAM 303
-#define INPUT 304
-#define OUTPUT 305
-#define INOUT 306
-#define WIRE 307
-#define TRI 308
-#define TRI0 309
-#define TRI1 310
-#define SUPPLY0 311
-#define SUPPLY1 312
-#define WAND 313
-#define TRIAND 314
-#define TRIOR 315
-#define WOR 316
-#define TRIREG 317
-#define SCALARED 318
-#define VECTORED 319
-#define REG 320
-#define EVENT 321
-#define SMALL 322
-#define MEDIUM 323
-#define LARGE 324
-#define STRONG0 325
-#define STRONG1 326
-#define PULL0 327
-#define PULL1 328
-#define WEAK0 329
-#define WEAK1 330
-#define HIGHZ0 331
-#define HIGHZ1 332
-#define AND 333
-#define NAND 334
-#define OR 335
-#define NOR 336
-#define XOR 337
-#define XNOR 338
-#define BUF 339
-#define BUFIF0 340
-#define BUFIF1 341
-#define NOT 342
-#define NOTIF0 343
-#define NOTIF1 344
-#define PULLDOWN 345
-#define PULLUP 346
-#define NMOS 347
-#define RNMOS 348
-#define PMOS 349
-#define RPMOS 350
-#define CMOS 351
-#define RCMOS 352
-#define TRAN 353
-#define RTRAN 354
-#define TRANIF0 355
-#define TRANIF1 356
-#define RTRANIF0 357
-#define RTRANIF1 358
-#define ASSIGN 359
-#define DEASSIGN 360
-#define _INITIAL_ 361
-#define ALWAYS 362
-#define IF 363
-#define ELSE 364
-#define CASE 365
-#define CASEZ 366
-#define CASEX 367
-#define ENDCASE 368
-#define DEFAULT 369
-#define FOREVER 370
-#define REPEAT 371
-#define WHILE 372
-#define FOR 373
-#define WAIT 374
-#define DISABLE 375
-#define FORCE 376
-#define RELEASE 377
-#define FORK 378
-#define JOIN 379
-#define POSEDGE 380
-#define NEGEDGE 381
-#define EDGE 382
-#define OUTPUT_SYMBOL 383
-#define INIT_VAL 384
-#define STRING 385
-#define IDENTIFIER 386
-#define DECIMAL_NUMBER 387
-#define UNSIGNED_NUMBER 388
-#define BASE 389
-#define SCALAR_CONSTANT 390
-#define LEVEL_SYMBOL 391
-#define EDGE_SYMBOL 392
-#define EDGE_DESCRIPTOR 393
+#define IDENTIFIER 258
+#define SYSTEM_IDENTIFIER 259
+#define STRING 260
+#define TIME_LITERAL 261
+#define TYPE_IDENTIFIER 262
+#define PACKAGE_IDENTIFIER 263
+#define DISCIPLINE_IDENTIFIER 264
+#define PATHPULSE_IDENTIFIER 265
+#define BASED_NUMBER 266
+#define DEC_NUMBER 267
+#define UNBASED_NUMBER 268
+#define REALTIME 269
+#define K_PLUS_EQ 270
+#define K_MINUS_EQ 271
+#define K_INCR 272
+#define K_DECR 273
+#define K_LE 274
+#define K_GE 275
+#define K_EG 276
+#define K_EQ 277
+#define K_NE 278
+#define K_CEQ 279
+#define K_CNE 280
+#define K_LP 281
+#define K_LS 282
+#define K_RS 283
+#define K_RSS 284
+#define K_SG 285
+#define K_CONTRIBUTE 286
+#define K_PO_POS 287
+#define K_PO_NEG 288
+#define K_POW 289
+#define K_PSTAR 290
+#define K_STARP 291
+#define K_DOTSTAR 292
+#define K_LOR 293
+#define K_LAND 294
+#define K_NAND 295
+#define K_NOR 296
+#define K_NXOR 297
+#define K_TRIGGER 298
+#define K_SCOPE_RES 299
+#define K_edge_descriptor 300
+#define K_always 301
+#define K_and 302
+#define K_assign 303
+#define K_begin 304
+#define K_buf 305
+#define K_bufif0 306
+#define K_bufif1 307
+#define K_case 308
+#define K_casex 309
+#define K_casez 310
+#define K_cmos 311
+#define K_deassign 312
+#define K_default 313
+#define K_defparam 314
+#define K_disable 315
+#define K_edge 316
+#define K_else 317
+#define K_end 318
+#define K_endcase 319
+#define K_endfunction 320
+#define K_endmodule 321
+#define K_endprimitive 322
+#define K_endspecify 323
+#define K_endtable 324
+#define K_endtask 325
+#define K_event 326
+#define K_for 327
+#define K_force 328
+#define K_forever 329
+#define K_fork 330
+#define K_function 331
+#define K_highz0 332
+#define K_highz1 333
+#define K_if 334
+#define K_ifnone 335
+#define K_initial 336
+#define K_inout 337
+#define K_input 338
+#define K_integer 339
+#define K_join 340
+#define K_large 341
+#define K_macromodule 342
+#define K_medium 343
+#define K_module 344
+#define K_nand 345
+#define K_negedge 346
+#define K_nmos 347
+#define K_nor 348
+#define K_not 349
+#define K_notif0 350
+#define K_notif1 351
+#define K_or 352
+#define K_output 353
+#define K_parameter 354
+#define K_pmos 355
+#define K_posedge 356
+#define K_primitive 357
+#define K_pull0 358
+#define K_pull1 359
+#define K_pulldown 360
+#define K_pullup 361
+#define K_rcmos 362
+#define K_real 363
+#define K_realtime 364
+#define K_reg 365
+#define K_release 366
+#define K_repeat 367
+#define K_rnmos 368
+#define K_rpmos 369
+#define K_rtran 370
+#define K_rtranif0 371
+#define K_rtranif1 372
+#define K_scalared 373
+#define K_small 374
+#define K_specify 375
+#define K_specparam 376
+#define K_strong0 377
+#define K_strong1 378
+#define K_supply0 379
+#define K_supply1 380
+#define K_table 381
+#define K_task 382
+#define K_time 383
+#define K_tran 384
+#define K_tranif0 385
+#define K_tranif1 386
+#define K_tri 387
+#define K_tri0 388
+#define K_tri1 389
+#define K_triand 390
+#define K_trior 391
+#define K_trireg 392
+#define K_vectored 393
+#define K_wait 394
+#define K_wand 395
+#define K_weak0 396
+#define K_weak1 397
+#define K_while 398
+#define K_wire 399
+#define K_wor 400
+#define K_xnor 401
+#define K_xor 402
+#define K_Shold 403
+#define K_Snochange 404
+#define K_Speriod 405
+#define K_Srecovery 406
+#define K_Ssetup 407
+#define K_Ssetuphold 408
+#define K_Sskew 409
+#define K_Swidth 410
+#define KK_attribute 411
+#define K_bool 412
+#define K_logic 413
+#define K_automatic 414
+#define K_endgenerate 415
+#define K_generate 416
+#define K_genvar 417
+#define K_localparam 418
+#define K_noshowcancelled 419
+#define K_pulsestyle_onevent 420
+#define K_pulsestyle_ondetect 421
+#define K_showcancelled 422
+#define K_signed 423
+#define K_unsigned 424
+#define K_Sfullskew 425
+#define K_Srecrem 426
+#define K_Sremoval 427
+#define K_Stimeskew 428
+#define K_cell 429
+#define K_config 430
+#define K_design 431
+#define K_endconfig 432
+#define K_incdir 433
+#define K_include 434
+#define K_instance 435
+#define K_liblist 436
+#define K_library 437
+#define K_use 438
+#define K_wone 439
+#define K_uwire 440
+#define K_alias 441
+#define K_always_comb 442
+#define K_always_ff 443
+#define K_always_latch 444
+#define K_assert 445
+#define K_assume 446
+#define K_before 447
+#define K_bind 448
+#define K_bins 449
+#define K_binsof 450
+#define K_bit 451
+#define K_break 452
+#define K_byte 453
+#define K_chandle 454
+#define K_class 455
+#define K_clocking 456
+#define K_const 457
+#define K_constraint 458
+#define K_context 459
+#define K_continue 460
+#define K_cover 461
+#define K_covergroup 462
+#define K_coverpoint 463
+#define K_cross 464
+#define K_dist 465
+#define K_do 466
+#define K_endclass 467
+#define K_endclocking 468
+#define K_endgroup 469
+#define K_endinterface 470
+#define K_endpackage 471
+#define K_endprogram 472
+#define K_endproperty 473
+#define K_endsequence 474
+#define K_enum 475
+#define K_expect 476
+#define K_export 477
+#define K_extends 478
+#define K_extern 479
+#define K_final 480
+#define K_first_match 481
+#define K_foreach 482
+#define K_forkjoin 483
+#define K_iff 484
+#define K_ignore_bins 485
+#define K_illegal_bins 486
+#define K_import 487
+#define K_inside 488
+#define K_int 489
+#define K_interface 490
+#define K_intersect 491
+#define K_join_any 492
+#define K_join_none 493
+#define K_local 494
+#define K_longint 495
+#define K_matches 496
+#define K_modport 497
+#define K_new 498
+#define K_null 499
+#define K_package 500
+#define K_packed 501
+#define K_priority 502
+#define K_program 503
+#define K_property 504
+#define K_protected 505
+#define K_pure 506
+#define K_rand 507
+#define K_randc 508
+#define K_randcase 509
+#define K_randsequence 510
+#define K_ref 511
+#define K_return 512
+#define K_sequence 513
+#define K_shortint 514
+#define K_shortreal 515
+#define K_solve 516
+#define K_static 517
+#define K_string 518
+#define K_struct 519
+#define K_super 520
+#define K_tagged 521
+#define K_this 522
+#define K_throughout 523
+#define K_timeprecision 524
+#define K_timeunit 525
+#define K_type 526
+#define K_typedef 527
+#define K_union 528
+#define K_unique 529
+#define K_var 530
+#define K_virtual 531
+#define K_void 532
+#define K_wait_order 533
+#define K_wildcard 534
+#define K_with 535
+#define K_within 536
+#define K_timeprecision_check 537
+#define K_timeunit_check 538
+#define K_accept_on 539
+#define K_checker 540
+#define K_endchecker 541
+#define K_eventually 542
+#define K_global 543
+#define K_implies 544
+#define K_let 545
+#define K_nexttime 546
+#define K_reject_on 547
+#define K_restrict 548
+#define K_s_always 549
+#define K_s_eventually 550
+#define K_s_nexttime 551
+#define K_s_until 552
+#define K_s_until_with 553
+#define K_strong 554
+#define K_sync_accept_on 555
+#define K_sync_reject_on 556
+#define K_unique0 557
+#define K_until 558
+#define K_until_with 559
+#define K_untyped 560
+#define K_weak 561
+#define K_implements 562
+#define K_interconnect 563
+#define K_nettype 564
+#define K_soft 565
+#define K_above 566
+#define K_abs 567
+#define K_absdelay 568
+#define K_abstol 569
+#define K_access 570
+#define K_acos 571
+#define K_acosh 572
+#define K_ac_stim 573
+#define K_aliasparam 574
+#define K_analog 575
+#define K_analysis 576
+#define K_asin 577
+#define K_asinh 578
+#define K_atan 579
+#define K_atan2 580
+#define K_atanh 581
+#define K_branch 582
+#define K_ceil 583
+#define K_connect 584
+#define K_connectmodule 585
+#define K_connectrules 586
+#define K_continuous 587
+#define K_cos 588
+#define K_cosh 589
+#define K_ddt 590
+#define K_ddt_nature 591
+#define K_ddx 592
+#define K_discipline 593
+#define K_discrete 594
+#define K_domain 595
+#define K_driver_update 596
+#define K_endconnectrules 597
+#define K_enddiscipline 598
+#define K_endnature 599
+#define K_endparamset 600
+#define K_exclude 601
+#define K_exp 602
+#define K_final_step 603
+#define K_flicker_noise 604
+#define K_floor 605
+#define K_flow 606
+#define K_from 607
+#define K_ground 608
+#define K_hypot 609
+#define K_idt 610
+#define K_idtmod 611
+#define K_idt_nature 612
+#define K_inf 613
+#define K_initial_step 614
+#define K_laplace_nd 615
+#define K_laplace_np 616
+#define K_laplace_zd 617
+#define K_laplace_zp 618
+#define K_last_crossing 619
+#define K_limexp 620
+#define K_ln 621
+#define K_log 622
+#define K_max 623
+#define K_merged 624
+#define K_min 625
+#define K_nature 626
+#define K_net_resolution 627
+#define K_noise_table 628
+#define K_paramset 629
+#define K_potential 630
+#define K_pow 631
+#define K_resolveto 632
+#define K_sin 633
+#define K_sinh 634
+#define K_slew 635
+#define K_split 636
+#define K_sqrt 637
+#define K_tan 638
+#define K_tanh 639
+#define K_timer 640
+#define K_transition 641
+#define K_units 642
+#define K_white_noise 643
+#define K_wreal 644
+#define K_zi_nd 645
+#define K_zi_np 646
+#define K_zi_zd 647
+#define K_zi_zp 648
+#define K_TAND 649
+#define K_OR_EQ 650
+#define K_AND_EQ 651
+#define K_MOD_EQ 652
+#define K_DIV_EQ 653
+#define K_MUL_EQ 654
+#define K_RSS_EQ 655
+#define K_RS_EQ 656
+#define K_LS_EQ 657
+#define K_XOR_EQ 658
+#define UNARY_PREC 659
+#define less_than_K_else 660
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
+
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif

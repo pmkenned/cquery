@@ -23,8 +23,13 @@ int main(int argc, char * argv[]) {
 
     Bravo.add_inst(Charlie, "c0");
 
-    Alpha.add_inst(Bravo, "b0");
-    Alpha.add_inst(Bravo, "b1");
+    ToBeInst * b0_tbi = Alpha.add_inst(Bravo, "b0");
+    Port p0("x", "a");
+    b0_tbi->add_port(p0);
+
+    ToBeInst * b1_tbi = Alpha.add_inst(Bravo, "b1");
+    Port p1("x", "b");
+    b0_tbi->add_port(p1);
 
     Instantiation a = Alpha.instantiate();
 

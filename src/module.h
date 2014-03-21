@@ -17,8 +17,13 @@ struct ToBeInst {
     private:
         string name;
         Module& module_type;
+        PortMap pm;
     public:
         ToBeInst(Module& mt, string n = "") : module_type(mt), name(n)  {}
+
+        void add_port(Port p) {
+            pm.push_back(p);
+        }
 };
 
 class Module {
@@ -55,21 +60,25 @@ class Module {
             inputs.push_back(s);
         }
 
-        void add_inst(Module& mt, string n) {
+        ToBeInst * add_inst(Module& mt, string n) {
             ToBeInst * tbi = new ToBeInst(mt, n);
             tbis.push_back(*tbi);
+            return tbi;
         }
 
-        Instantiation& instantiate(string n = "", Instantiation * parent = 0) {
+        Instantiation& instantiate(string n = "", Instantiation * parent = 0, PortMap pm = PortMap()) {
+            if(n == "")
+                n = name;
             std::cout << "creating instantiation with name " << n << std::endl;
 
-            Instantiation * inst = new Instantiation(this, parent, n);
+            Instantiation * inst = new Instantiation(this, parent, n, pm);
 
             std::list<ToBeInst>::iterator i;
             for(i = tbis.begin(); i != tbis.end(); i++) {
                 Module & i_m = i->module_type;
                 string i_n = i->name;
-                Instantiation & new_inst = i_m.instantiate(i_n, inst);
+                PortMap i_pm = i->pm;
+                Instantiation & new_inst = i_m.instantiate(i_n, inst, i_pm);
                 inst->add_inst(new_inst);
             }
 

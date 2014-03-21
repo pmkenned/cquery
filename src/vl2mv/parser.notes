@@ -1,0 +1,141 @@
+[parser.notes]
+
+A collection of comments received from people I have given this parser to.
+These changes have _NOT_  been made in the distribution as it now stands,
+and are untested.  You may incorporate them into the code if you wish.
+
+==============================================================================
+
+From cmb@ksr.com Mon Mar 15 16:27:26 1993
+Subject: vl2mv
+
+viraphol: Thanks for the pointers to the Verilog parser.  I have obtained it and
+been working on bringing it up.
+
+riepe: I received your version of vl2mv.  I have had some problems compiling it
+on my Sparc2.  However, after some bug fixes described below, I have it parsing
+and printing out the parse tree of a several page Verilog program.
+
+stcheng: I wanted to let you know that I ftp'ed a copy of vl2mv.  In addition, I
+received a second copy from riepe.  He had made his version compile and run for
+him so I started working with his sources.  I instantly ran into several
+problems which I will describe below.  If any of you have already debugged the
+stuff I am finding, I would appreciate knowing.  I am mainly parsing behavioral
+Verilog.  Has this parser been used for that yet?
+
+My problems:
+
+1) In verilog.l, the parsing of strings seems broken.  I made the following
+change:
+
+97c102
+< <Snormal>\"[^"]*\"          { return YYSTRING; }             <-- new
+---
+> <Snormal>\"[^"]*            { return YYSTRING; }             <-- old
+
+2) In verilog.l, form-feeds don't count as whitespace (section 2.2 of March 1991
+Cadence Verilog manual).  I changed the following:
+
+54c56
+< Space       [\n\r\t\b\f ]					<-- new
+---
+> Space       [\n\r\t\b ]					<-- old
+220c225
+< <Snormal>\\[^\n\t\b\r\f ]*    { 				<-- new
+---
+> <Snormal>\\[^\n\t\b\r ]*      { 				<-- old
+
+3) In verilog.y, vl_create_expr was called with the wrong number of
+arguments in rule "function_call : identifier '(' expression_list ')'":
+
+3011c3014
+< 				  $1, $3, NIL(void));		<-- new
+---
+> 				  $1, $3);			<-- old
+
+4) In verilog.y, syntax "port_list : port | port_list ',' port", handle was
+declared and used incorrectly:
+
+414c416
+< 	      lsHandle handle;					<-- new
+---
+> 	      lsHandle *handle;					<-- old
+417c419
+< 	      lsNewEnd($1, (lsGeneric)$3, &handle);		<-- new
+---
+> 	      lsNewEnd($1, (lsGeneric)$3, handle);		<-- old
+
+5) In verilog.y, syntax "function : YYFUNCTION range_or_type_opt YYID ';'
+tf_declaration_eclr statement_opt YYENDFUNCTION", I had to write it as follows:
+
+	      if ($2 == NIL(vl_range_or_type)) {
+		  func_type = IntFuncDecl; /* default function type */
+		  $$ = vl_create_function(func_type, NIL(vl_range), $<idrng>4, $6, $7);
+	      } else {
+		  switch ($2->type) {
+		  case Range_Dcl: func_type = RangeFuncDecl; break;
+		  case Integer_Dcl: func_type = IntFuncDecl; break;
+		  case Real_Dcl: func_type = RealFuncDecl; break; 
+		  default: internal_error("unknown function type");
+		  }
+		  $$ = vl_create_function(func_type, $2->range, $<idrng>4, $6, $7);
+	      }
+
+You had written it as
+
+	      if ($2 == NIL(vl_range_or_type)) {
+		  func_type = IntFuncDecl; /* default function type */
+	      } else {
+		  switch ($2->type) {
+		  case Range_Dcl: func_type = RangeFuncDecl; break;
+		  case Integer_Dcl: func_type = IntFuncDecl; break;
+		  case Real_Dcl: func_type = RealFuncDecl; break; 
+		  defualt: internal_error("unknown function type");
+		  }
+	      }
+	      $$ = vl_create_function(func_type, $2->range, $<idrng>4, $6, $7);
+
+This can cause "$2->range" to follow a null pointer.  Some computers allow this
+but generally it is a bad idea.
+
+===============================================================================
+
+From: hai@fc.hp.com (Hai Vo-Ba)
+Subject: Re: Verilog HDL parser/analyzer
+
+Michael Anthony Riepe (riepe@quip.eecs.umich.edu) wrote:
+: 
+: The parser itself seems to contain most of the verilog-HDL grammar, though
+: many behavioral constructs are unimplemented in the data structure
+: routines.  It is still under development, so there are bugs.
+: 
+: I spent a few days hacking the code and removed a lot of hooks to berkeley
+: OCTTOOLS code that wasn't included with the distribution.  The code as
+: I downloaded it didn't compile.  I'll place this on the anonymous FTP
+: site here (gip.eecs.umich.edu in pub/riepe) - you'll get a version
+: that compiles (at least it does on my decstation) and a list of bug
+: fixes that have been sent to me other people I've given it to.
+
+	Thanks for posting this info. I made a minor change to
+    vl2mv/include/util.h to get the parser to compile on HP-UX:
+
+	*** new_util.h	Sun May 30 21:31:04 1993
+	--- include/util.h	Thu Jan 28 11:43:36 1993
+	***************
+	*** 108,114 ****
+	  #include <stdlib.h>
+	  #else
+	  #if defined(hpux)
+	! extern void abort();
+	  extern VOID_HACK free(), exit(), perror();
+	! extern char *getenv();
+	! extern void *malloc(), *realloc(), *calloc();
+	--- 108,113 ----
+	  #include <stdlib.h>
+	  #else
+	  #if defined(hpux)
+	! extern int abort();
+	  extern VOID_HACK free(), exit(), perror();
+	! extern char *getenv(), *malloc(), *realloc(), *calloc();
+
+=============================================================================

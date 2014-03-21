@@ -23,6 +23,10 @@
   * Removed name_of_variable. Just using IDENTIFIER.
   * Removed name_of_function. Just using IDENTIFIER (but maybe should use identifier_hier)
   * Removed name_of_port. Just using IDENTIFIER.
+  * Removed name_of_block. Just using IDENTIFIER.
+  * Removed name_of_task. Just using IDENTIFIER.
+  * Removed name_of_register. Just using IDENTIFIER.
+  * Removed name_of_memory. Just using IDENTIFIER.
 */
 
 /* Syntax */
@@ -177,7 +181,7 @@ module_item:
 	| function;
 
 UDP:
-	  PRIMITIVE IDENTIFIER '(' list_of_variables  ')' ';'
+	  PRIMITIVE IDENTIFIER '(' list_of_identifiers  ')' ';'
 		UDP_declaration_list
 		UDP_initial_statement_opt
 		table_definition
@@ -251,13 +255,10 @@ level_symbol_plus: /* plus meaning one or more */
 	| level_symbol_plus LEVEL_SYMBOL;
 
 task:
-	  TASK name_of_task ';'
+	  TASK IDENTIFIER ';'
 		tf_declaration_star
 		statement_or_null
 		ENDTASK;
-
-name_of_task:
-	  IDENTIFIER;
 
 function:
 	  FUNCTION range_or_type_opt IDENTIFIER ';'
@@ -294,17 +295,17 @@ parameter_declaration:
 	  PARAMETER list_of_param_assignments ';';
 
 input_declaration:
-	  INPUT range_opt list_of_variables ';';
+	  INPUT range_opt list_of_identifiers ';';
 
 output_declaration:
-	  OUTPUT range_opt list_of_variables ';';
+	  OUTPUT range_opt list_of_identifiers ';';
 
 inout_declaration:
-	  INOUT range_opt list_of_variables ';';
+	  INOUT range_opt list_of_identifiers ';';
 
 net_declaration:
-	  NETTYPE expandrange_opt delay_opt list_of_variables ';'
-	| TRIREG charge_strength_opt expandrange_opt delay_opt list_of_variables ';'
+	  NETTYPE expandrange_opt delay_opt list_of_identifiers ';'
+	| TRIREG charge_strength_opt expandrange_opt delay_opt list_of_identifiers ';'
 	| NETTYPE drive_strength_opt expandrange_opt delay_opt list_of_assignments ';';
 
 NETTYPE:
@@ -338,10 +339,10 @@ integer_declaration:
 	  INTEGER list_of_register_variables ';';
 
 real_declaration:
-	  REAL list_of_variables ';';
+	  REAL list_of_identifiers ';';
 
 event_declaration:
-	  EVENT list_of_name_of_events ';';
+	  EVENT list_of_identifiers ';';
 
 continuous_assign:
 	  ASSIGN drive_strength_opt delay_opt list_of_assignments ';'
@@ -350,30 +351,18 @@ continuous_assign:
 parameter_override:
 	  DEFPARAM list_of_param_assignments ';';
 
-list_of_variables:
-	  IDENTIFIER
-	| list_of_variables ',' IDENTIFIER;
+list_of_identifiers:
+      IDENTIFIER
+    | list_of_identifiers ',' IDENTIFIER
+    ;
 
 list_of_register_variables:
 	  register_variable
 	| list_of_register_variables ',' register_variable;
 
 register_variable:
-	  name_of_register
-	| name_of_memory '[' constant_expression ':' constant_expression ']';
-
-name_of_register:
-	  IDENTIFIER;
-
-name_of_memory:
-	  IDENTIFIER;
-
-list_of_name_of_events:
-	  name_of_event
-	| list_of_name_of_events ',' name_of_event;
-
-name_of_event:
-	  IDENTIFIER;
+	  IDENTIFIER
+	| IDENTIFIER '[' constant_expression ':' constant_expression ']';
 
 charge_strength_opt: /* empty */
 	| charge_strength;
@@ -547,13 +536,13 @@ statement:
 	| FOR '(' assignment ';' expression ';' assignment ')' statement
 	| delay_or_event_control statement_or_null
 	| WAIT '(' expression ')' statement_or_null
-	| HYPH_GT name_of_event ';'
+	| HYPH_GT IDENTIFIER ';'
 	| seq_block
 	| par_block
 	| task_enable
 	| system_task_enable
-	| DISABLE name_of_task ';'
-	| DISABLE name_of_block ';'
+	| DISABLE IDENTIFIER ';'
+	| DISABLE IDENTIFIER ';'
 	| ASSIGN assignment ';'
 	| DEASSIGN lvalue ';'
 	| FORCE assignment ';'
@@ -586,14 +575,11 @@ case_item:
 
 seq_block:
 	  _BEGIN_ statement_list END
-	| _BEGIN_ ':' name_of_block block_declaration_list statement_list END;
+	| _BEGIN_ ':' IDENTIFIER block_declaration_list statement_list END;
 
 par_block:
 	  FORK statement_list JOIN
-	| FORK ':' name_of_block block_declaration_list statement_list JOIN;
-
-name_of_block:
-	  IDENTIFIER;
+	| FORK ':' IDENTIFIER block_declaration_list statement_list JOIN;
 
 block_declaration_list: /* empty */
 	| block_declaration_list block_declaration;
@@ -607,8 +593,8 @@ block_declaration:
 	| event_declaration;
 
 task_enable:
-	  name_of_task
-	| name_of_task '(' expression_list ')' ';';
+	  IDENTIFIER
+	| IDENTIFIER '(' expression_list ')' ';';
 
 system_task_enable:
 	  name_of_system_task ';'
@@ -779,8 +765,8 @@ level_sensitive_path_declaration:
 
 conditional_port_expression:
 	  port_reference
-	| UNARY_OPERATOR port_reference
-	| port_reference BINARY_OPERATOR port_reference;
+	| unary_operator port_reference
+	| port_reference binary_operator port_reference;
 
 polarity_operator_opt: /* empty */
 	| polarity_operator;
@@ -817,8 +803,8 @@ sdpd:
 	 IF '(' sdpd_conditional_expression ')' path_description '=' path_delay_value ';';
 
 sdpd_conditional_expression:
-	  expression BINARY_OPERATOR expression
-	| UNARY_OPERATOR expression;
+	  expression binary_operator expression
+	| unary_operator expression;
 
 lvalue:
 	  identifier_hier
@@ -842,12 +828,12 @@ expression_list:
 
 expression:
 	  primary
-	| UNARY_OPERATOR primary
-	| expression BINARY_OPERATOR expression
+	| unary_operator primary
+	| expression binary_operator expression
 	| expression '?' expression ':' expression
 	| STRING;
 
-UNARY_OPERATOR:
+unary_operator:
 	  '+'
 	| '-'
 	| '!'
@@ -859,7 +845,7 @@ UNARY_OPERATOR:
 	| '^'
 	| TILDE_CARET;
 
-BINARY_OPERATOR:
+binary_operator:
 	  '+'
 	| '-'
 	| '*'
