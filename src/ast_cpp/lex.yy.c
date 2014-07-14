@@ -554,6 +554,9 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "vhdl_ast.lex"
 #line 4 "vhdl_ast.lex"
+
+extern "C" int yylex(void);
+
 #include <stdio.h>
 #include <string.h>
 #include "node.h"
@@ -562,7 +565,7 @@ char *yytext;
 int line = 1;
 int col = 1;
 //typedef node_t;
-#line 566 "lex.yy.c"
+#line 569 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -744,10 +747,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 14 "vhdl_ast.lex"
+#line 17 "vhdl_ast.lex"
 
 
-#line 751 "lex.yy.c"
+#line 754 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -832,266 +835,266 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 16 "vhdl_ast.lex"
+#line 19 "vhdl_ast.lex"
 ; /* remove comments */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 18 "vhdl_ast.lex"
+#line 21 "vhdl_ast.lex"
 col++;  /* ignore all other whitespace */
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 20 "vhdl_ast.lex"
+#line 23 "vhdl_ast.lex"
 line++; DEBUG && printf("\t(%d)\n%d ", col, line); col = 1;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 22 "vhdl_ast.lex"
+#line 25 "vhdl_ast.lex"
 DEBUG && printf("string "); col += strlen(yytext); yylval = node(strdup(yytext),NULL,NULL); return(STRING);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 24 "vhdl_ast.lex"
+#line 27 "vhdl_ast.lex"
 DEBUG && printf(", ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(',');
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 25 "vhdl_ast.lex"
+#line 28 "vhdl_ast.lex"
 DEBUG && printf(". ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('.');
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 26 "vhdl_ast.lex"
+#line 29 "vhdl_ast.lex"
 DEBUG && printf("; ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(';');
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 27 "vhdl_ast.lex"
+#line 30 "vhdl_ast.lex"
 DEBUG && printf(": ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(':');
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 28 "vhdl_ast.lex"
+#line 31 "vhdl_ast.lex"
 DEBUG && printf("{ ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('{');
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 29 "vhdl_ast.lex"
+#line 32 "vhdl_ast.lex"
 DEBUG && printf("} ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('}');
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 30 "vhdl_ast.lex"
+#line 33 "vhdl_ast.lex"
 DEBUG && printf("[ ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('[');
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 31 "vhdl_ast.lex"
+#line 34 "vhdl_ast.lex"
 DEBUG && printf("] ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(']');
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 32 "vhdl_ast.lex"
+#line 35 "vhdl_ast.lex"
 DEBUG && printf("( ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('(');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 33 "vhdl_ast.lex"
+#line 36 "vhdl_ast.lex"
 DEBUG && printf(") ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(')');
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 34 "vhdl_ast.lex"
+#line 37 "vhdl_ast.lex"
 DEBUG && printf("<= "); col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(LTEQ);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 35 "vhdl_ast.lex"
+#line 38 "vhdl_ast.lex"
 DEBUG && printf("=> "); col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(EQGT);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 36 "vhdl_ast.lex"
+#line 39 "vhdl_ast.lex"
 DEBUG && printf("& ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('&');
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 37 "vhdl_ast.lex"
+#line 40 "vhdl_ast.lex"
 DEBUG && printf("+ ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('+');
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 38 "vhdl_ast.lex"
+#line 41 "vhdl_ast.lex"
 DEBUG && printf("- ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('-');
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 39 "vhdl_ast.lex"
+#line 42 "vhdl_ast.lex"
 DEBUG && printf("= ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('=');
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 40 "vhdl_ast.lex"
+#line 43 "vhdl_ast.lex"
 DEBUG && printf("/= "); col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(NEQ);
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 41 "vhdl_ast.lex"
+#line 44 "vhdl_ast.lex"
 DEBUG && printf("< ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('<');
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 42 "vhdl_ast.lex"
+#line 45 "vhdl_ast.lex"
 DEBUG && printf("> ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('>');
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 43 "vhdl_ast.lex"
+#line 46 "vhdl_ast.lex"
 DEBUG && printf("' ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return('\'');
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 45 "vhdl_ast.lex"
+#line 48 "vhdl_ast.lex"
 DEBUG && printf("NOT ");  col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(NOT);
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 46 "vhdl_ast.lex"
+#line 49 "vhdl_ast.lex"
 DEBUG && printf("AND ");  col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(AND);
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 47 "vhdl_ast.lex"
+#line 50 "vhdl_ast.lex"
 DEBUG && printf("NAND "); col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(NAND);
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 48 "vhdl_ast.lex"
+#line 51 "vhdl_ast.lex"
 DEBUG && printf("OR ");   col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(OR);
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 49 "vhdl_ast.lex"
+#line 52 "vhdl_ast.lex"
 DEBUG && printf("NOR ");  col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(NOR);
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 50 "vhdl_ast.lex"
+#line 53 "vhdl_ast.lex"
 DEBUG && printf("XOR ");  col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(XOR);
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 51 "vhdl_ast.lex"
+#line 54 "vhdl_ast.lex"
 DEBUG && printf("XNOR "); col += strlen(yytext);  yylval = node(strdup(yytext), NULL, NULL); return(XNOR);
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 53 "vhdl_ast.lex"
+#line 56 "vhdl_ast.lex"
 DEBUG && printf("use ");          col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(USE);
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 54 "vhdl_ast.lex"
+#line 57 "vhdl_ast.lex"
 DEBUG && printf("library ");      col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(LIBRARY);
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 55 "vhdl_ast.lex"
+#line 58 "vhdl_ast.lex"
 DEBUG && printf("entity ");       col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(ENTITY);
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 56 "vhdl_ast.lex"
+#line 59 "vhdl_ast.lex"
 DEBUG && printf("architecture "); col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(ARCHITECTURE);
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 57 "vhdl_ast.lex"
+#line 60 "vhdl_ast.lex"
 DEBUG && printf("attribute ");    col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(ATTRIBUTE);
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 58 "vhdl_ast.lex"
+#line 61 "vhdl_ast.lex"
 DEBUG && printf("is ");           col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(IS);
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 59 "vhdl_ast.lex"
+#line 62 "vhdl_ast.lex"
 DEBUG && printf("of ");           col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(OF);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 60 "vhdl_ast.lex"
+#line 63 "vhdl_ast.lex"
 DEBUG && printf("port ");         col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(PORT);
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 61 "vhdl_ast.lex"
+#line 64 "vhdl_ast.lex"
 DEBUG && printf("generic ");      col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(GENERIC);
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 62 "vhdl_ast.lex"
+#line 65 "vhdl_ast.lex"
 DEBUG && printf("map ");          col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(MAP);
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 63 "vhdl_ast.lex"
+#line 66 "vhdl_ast.lex"
 DEBUG && printf("_begin_ ");      col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(_BEGIN_);
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 64 "vhdl_ast.lex"
+#line 67 "vhdl_ast.lex"
 DEBUG && printf("end ");          col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(END);
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 65 "vhdl_ast.lex"
+#line 68 "vhdl_ast.lex"
 DEBUG && printf("to ");           col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(TO);
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 66 "vhdl_ast.lex"
+#line 69 "vhdl_ast.lex"
 DEBUG && printf("signal ");       col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(SIGNAL);
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 67 "vhdl_ast.lex"
+#line 70 "vhdl_ast.lex"
 DEBUG && printf("in ");           col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(IN);
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 68 "vhdl_ast.lex"
+#line 71 "vhdl_ast.lex"
 DEBUG && printf("out ");          col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(OUT);
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 69 "vhdl_ast.lex"
+#line 72 "vhdl_ast.lex"
 DEBUG && printf("inout ");        col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(INOUT);
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 71 "vhdl_ast.lex"
+#line 74 "vhdl_ast.lex"
 DEBUG && printf("IDENT ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL, NULL); return(IDENT);
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 72 "vhdl_ast.lex"
+#line 75 "vhdl_ast.lex"
 DEBUG && printf("DIGIT ");  col += strlen(yytext); yylval = node(strdup(yytext), NULL,NULL);  return(DIGIT); /* TODO: should this be done with yacc? */
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 73 "vhdl_ast.lex"
+#line 76 "vhdl_ast.lex"
 DEBUG && printf("NUMBER "); col += strlen(yytext); yylval = node(strdup(yytext), NULL,NULL);  return(NUMBER); /* TODO: should I convert atoi? */
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 74 "vhdl_ast.lex"
+#line 77 "vhdl_ast.lex"
 ECHO;
 	YY_BREAK
-#line 1095 "lex.yy.c"
+#line 1098 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2085,4 +2088,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 74 "vhdl_ast.lex"
+#line 77 "vhdl_ast.lex"

@@ -1,37 +1,37 @@
 %{
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
 #include <assert.h>
 #include <ctype.h>
 
 #include "node.h"
 
 extern FILE * yyin;
+extern node_t * ast;
 
+extern "C" {
+    int yylex(void);
+    int yywrap();
+    int yyerror(const char *str);
+}
 
-node_t * new_node(char * s) {
-    node_t * n = malloc(sizeof(node_t));
-    n->num_children = 0;
-    n->child_cap = 10;
-    n->children = malloc(sizeof(node_t *)*10);
-    int l = strlen(s);
-    n->label = malloc(sizeof(char)*(l+1));
-    strncpy(n->label, s, l);
+node_t * new_node(std::string const & s) {
+    node_t * n = new node_t;
+    n->label = s;
     return n;
 }
 
 void add_child(node_t * n, node_t * c) {
-    if(n->num_children == n->child_cap) {
-        n->child_cap *= 2;
-        n->children = realloc(n->children, sizeof(node_t *) * n->child_cap);
-    }
-    n->children[n->num_children] = c;
-    n->num_children++;
+    n->children.push_back(c);
 }
 
-node_t * node(char * s, node_t * n1, node_t * n2) {
+node_t * node(std::string const & s, node_t * n1, node_t * n2) {
 //    fprintf(stderr,"creating new node with label %s\n",s);
     node_t * n = new_node(s);
     add_child(n, n1);
@@ -39,35 +39,35 @@ node_t * node(char * s, node_t * n1, node_t * n2) {
     return n;
 }
 
-void print_tree(FILE * fp, node_t * n, int depth) {
+void print_tree(std::ofstream & file, node_t * n, int depth) {
 
-    int i;
+    size_t num_children = n->children.size();
 
-    assert(n != NULL);
-    assert(n->label != NULL);
-
-    for(i=0; i < n->num_children; i++) {
+    for(size_t i=0; i < num_children; i++) {
         if(n->children[i] != NULL) {
+            file << n->label << "_" << n << " -> ";;
             if(isdigit(n->children[i]->label[0]))
-                fprintf(fp, "%s_%p -> c%s_%p;\n", n->label, n, n->children[i]->label, n->children[i]);
-            else
-                fprintf(fp, "%s_%p -> %s_%p;\n", n->label, n, n->children[i]->label, n->children[i]);
-            print_tree(fp,n->children[i], depth+1);
+                file << "c"; 
+            file << n->children[i]->label << "_" << n->children[i] << ";\n";
+            print_tree(file,n->children[i], depth+1);
         }
     }
 }
 
 void print_graph(node_t * n) {
     char filename[] = "graph.gv";
-    FILE * fp = fopen(filename, "w");
-    if(fp == NULL) {
-        fprintf(stderr, "error: cannot write to file %s\n",filename);
+
+    std::ofstream file;
+    file.open(filename);
+
+    if(!file.is_open()) {
+        std::cerr << "error: cannot write to file " << filename << std::endl;
         exit(1);
     }
-    fprintf(fp, "digraph G {\n");
-    print_tree(fp,n,0);
-    fprintf(fp, "}\n");
-    fclose(fp);
+    file <<  "digraph G {\n";
+    print_tree(file,n,0);
+    file << "}\n";
+    file.close();
 }
 
 

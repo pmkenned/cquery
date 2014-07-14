@@ -972,3 +972,7 @@ int yywrap()
 {
     return 1;
 }
+
+yyerror(char * s) {
+    fprintf(stderr, "%s\n",s);
+}

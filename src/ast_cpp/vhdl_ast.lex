@@ -1,6 +1,9 @@
 ES (\\(['"\?\\abfnrtv]|[0-7]{1,3}|x[a-fA-F0-9]+))
 
 %{
+
+extern "C" int yylex(void);
+
 #include <stdio.h>
 #include <string.h>
 #include "node.h"

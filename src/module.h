@@ -4,6 +4,8 @@
 #include <iostream>
 #include <list>
 #include "instantiation.h"
+#include "signal.h"
+#include "assign.h"
 
 namespace rtlp {
 
